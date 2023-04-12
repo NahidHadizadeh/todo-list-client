@@ -28,17 +28,7 @@ function AddMember({ ShowModal }) {
     admin: false,
   });
   const [countSkills, setCountSkills] = useState(0);
-  // const [NewSkill, setNewSkill] = useState("");
-  // useEffect(() => {
-  //   setNewMember({ ...NewMember, skills: [...NewMember.skills, NewSkill] });
-  // }, NewSkill);
-  //
 
-  // /////admin disable handler
-  // useEffect(() => {
-  // }, []);
-
-  // adminChecked();
   // handleSelectLanguage
   function handleSelectLanguage(e) {
     if (e.target.checked) {
@@ -76,7 +66,6 @@ function AddMember({ ShowModal }) {
     const showSkillElem = document.querySelector(".showSkill");
     showSkillElem.innerHTML += ` <span className="titleSkill">${newSkill}  </span>`;
     document.querySelector(".skillInput").value = "";
-    // setSkills([...skills, newSkill]);
   }
 
   function handleCloseModal() {
@@ -94,16 +83,12 @@ function AddMember({ ShowModal }) {
     }
     //// close modal
     handleCloseModal();
-    // data.
     //// create new todo API
     createNewMemberAPI(NewMember);
     ///// change url
     // navigate("/members");
     // refresh page for display all todos
     navigate(0);
-
-    // setNewTodoTitle({ title: "" });
-    // change url
   }
 
   return (
@@ -114,7 +99,6 @@ function AddMember({ ShowModal }) {
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            {/* <Form.Label>Name:</Form.Label> */}
             <Form.Control
               type="text"
               placeholder="enter your name"
@@ -128,7 +112,6 @@ function AddMember({ ShowModal }) {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
-            {/* <Form.Label>Age:</Form.Label> */}
             <Form.Control
               type="number"
               placeholder="enter your age"
@@ -139,7 +122,6 @@ function AddMember({ ShowModal }) {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicGithub">
-            {/* <Form.Label>Github address</Form.Label> */}
             <Form.Control
               type="string"
               placeholder="Enter github address"
@@ -152,7 +134,6 @@ function AddMember({ ShowModal }) {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicLinkedin">
-            {/* <Form.Label>LinkedIn address</Form.Label> */}
             <Form.Control
               type="email"
               placeholder="Enter email address"
@@ -160,9 +141,6 @@ function AddMember({ ShowModal }) {
                 setNewMember({ ...NewMember, email: e.target.value?.trim() })
               }
             />
-            {/* <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text> */}
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -203,7 +181,6 @@ function AddMember({ ShowModal }) {
                 className="skillInput"
                 type="text"
                 placeholder="Enter skills and submited"
-                // onchange={(e) => setNewSkill(e.target.value)}
               />
               <button
                 className="btn btn-success submitSkill"
@@ -212,28 +189,9 @@ function AddMember({ ShowModal }) {
                 submit
               </button>
             </div>
-            <Form.Text className="text-muted showSkill">
-              {/* {skills?.map((skill, index) => {
-                return <label key={index}>{skill}</label>;
-              })} */}
-            </Form.Text>
+            <Form.Text className="text-muted showSkill"></Form.Text>
           </Form.Group>
           <AdminChecked handleAdmin={handleAdmin} />
-          {/* <Form.Group className="mb-3">
-            <Form.Label>Admin</Form.Label>
-            <Form.Check
-              type="checkbox"
-              label="Admin"
-              name="Admin"
-              className="adminCheck"
-              onChange={(e) => {
-                handleAdmin(e);
-                // e.target.value
-                // setNewMember({ ...NewMember, admin: e.target.value });
-                // : setNewMember({ ...NewMember, admin: "no" });
-              }}
-            />
-          </Form.Group> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>

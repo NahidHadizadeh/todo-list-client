@@ -16,6 +16,8 @@ form input::placeholder {
 .modal-title {
   font-size: 1.1rem;
 }
+.modal-content {
+    color: black !important;}
 .ImageForm {
   width: 2.3rem;
   height: 2.3rem;
