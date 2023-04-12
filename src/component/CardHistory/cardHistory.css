@@ -1,0 +1,13 @@
+.card-history {
+  border: 1px solid black !important;
+  padding: 0.5rem 2rem;
+  margin: 1rem 0.5rem;
+  text-align: center;
+  background-color: var(--Dark-Blue);
+}
+.card-history p {
+  margin-top: 1rem !important;
+}
+.card-history p span {
+  font-weight: bold;
+}

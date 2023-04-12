@@ -1,0 +1,25 @@
+form {
+  font-size: 0.8rem;
+}
+
+form input,
+.form-control:focus {
+  box-shadow: 1px 1px 10px grey !important;
+}
+form input::placeholder {
+  font-size: 0.8rem;
+}
+
+.form-label {
+  font-weight: 500;
+}
+.modal-title {
+  font-size: 1.1rem;
+}
+.ImageForm {
+  width: 2.3rem;
+  height: 2.3rem;
+}
+.titleSkill {
+  margin: 3px 5px;
+}
