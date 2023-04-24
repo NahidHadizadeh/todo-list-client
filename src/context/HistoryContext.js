@@ -8,7 +8,7 @@ export const AllHistoryContext = createContext({
 function HistoryProvider({ children }) {
   const [AllHistory, setAllHistory] = useState([]);
   useEffect(() => {
-    getAllHistoryAPI().then((res) => setAllHistory(res.data?.reverse()));
+    getAllHistoryAPI().then((res) => setAllHistory(res?.data?.reverse()));
   }, []);
   return (
     <AllHistoryContext.Provider
