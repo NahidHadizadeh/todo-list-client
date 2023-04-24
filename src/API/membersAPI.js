@@ -13,12 +13,8 @@ const getOneMemberAPI = async (id) => {
   const result = axios.get(`${baseURL}/${id}`);
   return result;
 };
-// const deleteOneTodoAPI = async (id) => {
-//   const result = axios.delete(`${baseURL}/${id}`);
-//   return result;
-// };
+
 const updateOneMemberAPI = async (id, newMember) => {
-  console.log("api updat");
   const result = axios.patch(`${baseURL}/${id}`, newMember);
   return result;
 };
@@ -26,6 +22,5 @@ export {
   createNewMemberAPI,
   getAllMembersAPI,
   getOneMemberAPI,
-  //   deleteOneTodoAPI,
   updateOneMemberAPI,
 };
