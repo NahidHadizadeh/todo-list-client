@@ -6,11 +6,9 @@ export const AllTasksContext = createContext({
 });
 
 function AllTasksProvider({ children }) {
-  //   const [ShowModal, setShowModal] = useState(false);
   const [AllTasks, setAllTasks] = useState([]);
 
   useEffect(() => {
-    // get all todos with API
     getAllTodosAPI().then((res) => {
       setAllTasks(res.data);
     });
@@ -27,4 +25,3 @@ function AllTasksProvider({ children }) {
   );
 }
 export default AllTasksProvider;
-// //////////////////////////////////
