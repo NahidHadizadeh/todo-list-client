@@ -49,12 +49,12 @@
 .imgBox {
   justify-content: center;
   align-items: center;
+  margin-bottom: 1rem;
 }
 .imgCard {
-  width: 4rem;
+  width: 5rem;
   height: 4rem;
   border-radius: 50%;
-  border: 1px solid black;
 }
 .BoxMember {
   box-shadow: 1px 1px 10px rgb(121, 121, 121);
