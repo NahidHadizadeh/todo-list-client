@@ -15,7 +15,6 @@ function TableProj() {
 
   const AllTasks = useAllTasks().AllTasks;
   const AllMembers = useAllMembers().AllMembers;
-  // const dataBtnFormEdit = useAddButton();
   const [showModal, setShowModal] = useState(false);
   function handleCloseModal() {
     setShowModal(false);
@@ -26,8 +25,6 @@ function TableProj() {
   const [TaskIsComplete, setTaskIsComplete] = useState({});
   const [IsComplete, setIsComplete] = useState("");
   useEffect(() => {
-    console.log("is compl", IsComplete);
-    // const isCompleted = !TaskIsComplete.complete;
     if (TaskIsComplete.manager) {
       updateOneTodoAPI(TaskIsComplete._id, {
         ...TaskIsComplete,
@@ -39,18 +36,13 @@ function TableProj() {
   useEffect(() => {
     // ////create history for complete tasks
     if (TaskIsComplete !== {} && IsComplete === "click") {
-      console.log("!=={}");
-      console.log(TaskIsComplete);
       createNewHistoryAPI({
         title: TaskIsComplete?.complete ? "Don't Complete" : "Completed",
         newTodo: { ...TaskIsComplete },
       });
       navigate(0);
-    } else {
-      console.log("==={}");
     }
   }, [IsComplete]);
-
 
   //  // handle delete task
   async function handleDelete(task) {
@@ -69,7 +61,6 @@ function TableProj() {
     navigate(0);
   }
 
-
   return (
     <Table striped bordered hover variant="dark">
       <EditTodo
@@ -82,7 +73,11 @@ function TableProj() {
         <tr>
           <th>....</th>
           {AllMembers.map((member, index) => {
-            return <th key={index + "sotoon"} className="text-center">{member.name}</th>;
+            return (
+              <th key={index + "sotoon"} className="text-center">
+                {member.name}
+              </th>
+            );
           })}
         </tr>
       </thead>
@@ -96,12 +91,10 @@ function TableProj() {
               >
                 {task.title}
                 <div key={index + "divv"} className="d-flex">
-                  {/* <Timer deadline={new Date()} e={this} /> */}
                   <button
                     className="btn btn-warning editBtn"
                     onClick={() => {
                       setShowModal(true);
-                      console.log("edit");
                       setTodoForEdit(task);
                     }}
                   >
@@ -116,7 +109,6 @@ function TableProj() {
                   <button
                     className="btn btn-success completeBtn"
                     onClick={() => {
-                      console.log(task);
                       setIsComplete("click");
                       setTaskIsComplete(task);
                     }}
