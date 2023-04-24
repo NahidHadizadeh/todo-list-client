@@ -1,8 +1,5 @@
 import { useNavigate } from "react-router-dom";
-// import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-// import { createNewTodoAPI } from "../../API/todoListAPI";
-// import { AddBtnContext } from "../../context/addButton/AddButtonContext";
 import useAddButton from "../../hooks/AddButton/useAddButton";
 import "./addMember.css";
 import UploadFile from "../UploadFile/UploadFile";
@@ -86,8 +83,6 @@ function AddMember({ ShowModal }) {
     //// create new todo API
     createNewMemberAPI(NewMember);
     ///// change url
-    // navigate("/members");
-    // refresh page for display all todos
     navigate(0);
   }
 
