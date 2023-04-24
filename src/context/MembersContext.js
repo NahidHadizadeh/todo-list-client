@@ -3,11 +3,9 @@ import { getAllMembersAPI } from "../API/membersAPI";
 export const AllMembersContext = createContext({
   AllMembers: [],
   setAllMembers: () => {},
-  // setOneMember: () => {},
 });
 
 function AllMembersProvider({ children }) {
-  //   const [ShowModal, setShowModal] = useState(false);
   const [AllMembers, setAllMembers] = useState([]);
 
   useEffect(() => {
@@ -15,14 +13,12 @@ function AllMembersProvider({ children }) {
     getAllMembersAPI().then((res) => {
       setAllMembers(res.data);
     });
-    // updateOneMemberAPI(id, newMember);
   }, []);
   return (
     <AllMembersContext.Provider
       value={{
         AllMembers,
         setAllMembers,
-        // setOneMember,
       }}
     >
       {children}
@@ -30,4 +26,3 @@ function AllMembersProvider({ children }) {
   );
 }
 export default AllMembersProvider;
-// //////////////////////////////////
