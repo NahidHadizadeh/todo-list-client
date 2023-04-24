@@ -7,8 +7,6 @@ function CardHistory() {
   return (
     <>
       {AllHistory?.map((history) => {
-        // const { title, newTodo } = history;
-        console.log(history.newTodo);
         return (
           <Card
             key={history?.title + history?.newTodo?._id + "history"}
