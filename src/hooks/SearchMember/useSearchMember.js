@@ -1,5 +1,4 @@
 import { useContext } from "react";
-// import { AllMembersContext } from "../../context/MembersContext";
 import { SearchMemberContext } from "../../context/SearchMember";
 
 const useSearchMember = () => {
