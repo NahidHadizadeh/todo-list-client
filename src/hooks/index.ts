@@ -1,1 +1,0 @@
-export { useColors } from './useColors';
