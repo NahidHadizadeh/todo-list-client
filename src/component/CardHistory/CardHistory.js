@@ -6,12 +6,9 @@ function CardHistory() {
   const AllHistory = useAllHistory().AllHistory;
   return (
     <>
-      {AllHistory?.map((history) => {
+      {AllHistory?.map((history, index) => {
         return (
-          <Card
-            key={history?.title + history?.newTodo?._id + "history"}
-            className="card-history"
-          >
+          <Card key={index + "history"} className="card-history">
             <p>
               the task<span> {history?.newTodo?.title} </span>has been
               <span> {history?.title} </span> by the
