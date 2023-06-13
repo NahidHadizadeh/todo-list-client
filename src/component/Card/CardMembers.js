@@ -87,10 +87,10 @@ function CardMembers() {
                     <Row>
                       <p className="item-sub">
                         Languages:
-                        {member?.language?.map((lang) => {
+                        {member?.language?.map((lang, indexLang) => {
                           return (
                             <span
-                              key={index + "lang" + member.name}
+                              key={index + "lang" + indexLang + member.name}
                               className="spanItem mx-2 mb-2 bg-dark-blue"
                             >
                               {lang}
@@ -98,7 +98,7 @@ function CardMembers() {
                           );
                         })}
                       </p>
-                      <p>
+                      <div>
                         <span className="item-sub "> Skils: </span>
                         <div className="BoxSkills">
                           {member?.skills?.map((skill, index) => {
@@ -112,8 +112,8 @@ function CardMembers() {
                             );
                           })}
                         </div>
-                      </p>
-                      <p>
+                      </div>
+                      <div>
                         <span className="item-sub "> Tasks: </span>
                         <div className="BoxSkills">
                           {member?.tasks?.map((titleOfTask) => {
@@ -142,7 +142,7 @@ function CardMembers() {
                             });
                           })}
                         </div>
-                      </p>
+                      </div>
                     </Row>
                   </Row>
                 </div>

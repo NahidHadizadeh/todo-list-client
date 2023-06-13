@@ -28,10 +28,13 @@ function Home() {
           <span>Members: </span>
           <div>
             <div className="listOfMembers">
-              {AllMembers.map((member) => {
+              {AllMembers.map((member, index) => {
                 if (member.admin)
                   return (
-                    <div className="displayImage adminImage">
+                    <div
+                      key={"admin" + index}
+                      className="displayImage adminImage"
+                    >
                       {/* <img
                         src="./user.png"
                         alt={member.title}
@@ -44,10 +47,10 @@ function Home() {
             </div>
           </div>
           <div className="listOfMembers">
-            {AllMembers?.map((member) => {
+            {AllMembers?.map((member, index) => {
               if (!member.admin)
                 return (
-                  <div className="displayImage memberImage">
+                  <div key={index} className="displayImage memberImage">
                     {/* <img
                       src="/client/public/user.png"
                       alt={member.title}
