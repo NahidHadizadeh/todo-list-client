@@ -4,6 +4,7 @@ import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../../hooks/AllTasks/useAllTasks";
 import { useState, useEffect } from "react";
 import useSearchMember from "../../hooks/SearchMember/useSearchMember";
+import { FaUserCircle } from "react-icons/fa";
 
 function CardMembers() {
   const searchName = useSearchMember().SearchName;
@@ -51,11 +52,14 @@ function CardMembers() {
               >
                 <div className="BoxMember">
                   <Row xs="12" md="6" className=" pe-md-5 imgBox">
-                    <img
+                    {/* <img
                       className="imgCard"
                       src="./user.png"
                       alt="personal image"
-                    />
+                    /> */}
+                    <div className="imgCard d-flex align-items-center justify-content-center">
+                      <FaUserCircle />
+                    </div>
                   </Row>
                   <Row className="details ">
                     <Col xs="12" sm="6" className="details-col">
