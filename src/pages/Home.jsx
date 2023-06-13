@@ -10,6 +10,7 @@ import CreateTask from "../component/CreateTodo";
 import useAddButton from "../hooks/AddButton/useAddButton";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
+import { FaUserCircle } from "react-icons/fa";
 
 function Home() {
   const dataBtn = useAddButton();
@@ -30,12 +31,13 @@ function Home() {
               {AllMembers.map((member) => {
                 if (member.admin)
                   return (
-                    <div className="adminImage">
-                      <img
+                    <div className="displayImage adminImage">
+                      {/* <img
                         src="./user.png"
                         alt={member.title}
                         title={member.title}
-                      />
+                      /> */}
+                      <FaUserCircle />
                     </div>
                   );
               })}
@@ -45,12 +47,13 @@ function Home() {
             {AllMembers?.map((member) => {
               if (!member.admin)
                 return (
-                  <div className="memberImage">
-                    <img
+                  <div className="displayImage memberImage">
+                    {/* <img
                       src="/client/public/user.png"
                       alt={member.title}
                       title={member.title}
-                    />
+                    /> */}
+                    <FaUserCircle />
                   </div>
                 );
             })}

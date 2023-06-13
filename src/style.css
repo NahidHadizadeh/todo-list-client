@@ -46,15 +46,7 @@ ul li {
   align-items: center;
   flex-wrap: wrap;
 }
-.adminImage {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: blueviolet;
-  border-radius: 50%;
-}
-.adminBox {
-  display: block;
-}
+
 .listOfMembers {
   margin-left: 0.5rem;
 }
@@ -64,7 +56,19 @@ ul li {
   border: yellow;
   border-radius: 50%;
   background-color: aquamarine;
-  margin: 0.2rem;
+  margin: 0.1rem;
+  border: 1px solid #c1c1c1;
+}
+.displayImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.adminImage {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: blueviolet;
+  border-radius: 50%;
 }
 h3 {
   text-align: center;
