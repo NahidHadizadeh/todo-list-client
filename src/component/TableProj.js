@@ -28,7 +28,7 @@ function TableProj() {
     if (TaskIsComplete.manager) {
       updateOneTodoAPI(TaskIsComplete._id, {
         ...TaskIsComplete,
-        complete: !TaskIsComplete.complete,
+        complete: TaskIsComplete.complete ? false : true,
         updatedOn: new Date(),
       });
     }
@@ -47,11 +47,17 @@ function TableProj() {
   //  // handle delete task
   async function handleDelete(task) {
     await deleteOneTodoAPI(task._id);
-    AllMembers.filter((mem) => mem.name === task.title).map((member) => {
-      updateOneMemberAPI(member._id, {
-        ...member,
-        tasks: member.tasks.filter((tas) => tas !== task.title),
-      });
+    AllMembers.filter((mem) => {
+      if (mem.tasks.length > 0 && mem.name === task.manager) {
+        mem.tasks.map((taskOfMember) => {
+          if (taskOfMember === task.title) {
+            updateOneMemberAPI(mem._id, {
+              ...mem,
+              tasks: mem.tasks.filter((tas) => tas !== task.title),
+            });
+          }
+        });
+      }
     });
     // ////create history for delete tasks
     await createNewHistoryAPI({
