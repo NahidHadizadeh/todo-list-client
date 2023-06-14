@@ -16,6 +16,7 @@ function MembersIcon() {
                 (Math.floor(Math.random() * 7) + 1)
               }
             >
+              {/* ---------------------- get first char of first name and lastname ,and show those */}
               {member.name.includes(" ")
                 ? member.name.slice(0, 1).toUpperCase() +
                   member.name
