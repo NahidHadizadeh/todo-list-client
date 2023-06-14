@@ -92,6 +92,15 @@ ul li {
   background-color: blueviolet;
   border-radius: 50%;
 }
+/* --------------------------- check-box */
+.check-box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.form-check {
+  margin: 0 0.5rem;
+}
 h3 {
   text-align: center;
 }
