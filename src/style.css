@@ -53,11 +53,33 @@ ul li {
 .listOfMembers .memberImage {
   width: 2rem;
   height: 2rem;
-  border: yellow;
   border-radius: 50%;
-  background-color: aquamarine;
   margin: 0.1rem;
-  border: 1px solid #c1c1c1;
+  /* border: 1px solid; */
+}
+.bgColor1 {
+  background-color: rgb(83, 160, 134);
+}
+.bgColor2 {
+  background-color: rgb(32, 65, 54);
+}
+.bgColor3 {
+  background-color: rgb(74, 125, 184);
+}
+.bgColor4 {
+  background-color: rgb(230, 164, 66);
+}
+.bgColor5 {
+  background-color: rgb(60, 28, 68);
+}
+.bgColor6 {
+  background-color: rgb(234, 144, 252);
+}
+.bgColor7 {
+  background-color: rgb(207, 80, 80);
+}
+.bgColor8 {
+  background-color: rgb(241, 227, 99);
 }
 .displayImage {
   display: flex;
