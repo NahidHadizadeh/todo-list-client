@@ -126,7 +126,10 @@ function TableProj() {
               {AllMembers?.map((member, index) => {
                 return (
                   <td key={index + "selectMember"} className="tdMembers">
-                    {task.manager === member.name ? "X" : ""}
+                    {/* {task.manager === member.name ? "X" : ""} */}
+                    {task.manager?.map((manage) => {
+                      return manage === member.name ? "X" : "";
+                    })}
                   </td>
                 );
               })}
