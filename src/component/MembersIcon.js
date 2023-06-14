@@ -5,7 +5,6 @@ function MembersIcon() {
   return (
     <div className="listOfMembers">
       {AllMembers?.map((member, index) => {
-        console.log("first");
         if (!member.admin)
           return (
             <div
