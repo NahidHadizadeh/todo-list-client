@@ -17,38 +17,23 @@ function CreateTask({ ShowModal }) {
   const navigate = useNavigate();
   const [NewTask, setNewTask] = useState({
     title: "",
-    manager: "",
+    manager: [],
     complete: false,
     updatedOn: new Date(),
     createdOn: new Date(),
   });
 
   useEffect(() => {
-    console.log();
-    if (NewTask.manager !== "") {
-      // console.log(AllMembers.filter((mem) => mem.name === NewTask.manager));
+    if (NewTask.manager !== []) {
       AllMembers.filter((member) => member.name === NewTask.manager).map(
         (mem) => {
-          console.log("mem");
           updateOneMemberAPI(mem._id, {
             ...mem,
             tasks: [...mem.tasks, NewTask.title],
-            // tasks: [...mem.tasks, NewTask.title],
           });
         }
       );
     }
-    // AllMembers.map((member) => {
-    //   console.log("mambers.map");
-    //   if (member.name === NewTask.manager) {
-    //     console.log("name===manager");
-    //     updateOneMemberAPI(member._id, {
-    //       ...member,
-    //       tasks: [...member.tasks, NewTask.title],
-    //     });
-    //   }
-    // });
-    // }
   }, [NewTask]);
 
   function handleCloseModal() {
@@ -58,7 +43,6 @@ function CreateTask({ ShowModal }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // setNewTask({ ...NewTask, updatedOn: new Date(), createdOn: new Date() });
 
     // //////////validations
     // validatin title
@@ -70,14 +54,7 @@ function CreateTask({ ShowModal }) {
       alert("select manager");
       return;
     }
-    // if (
-    //   AllMembers.filter((member) => member?.name === NewTask?.manager).map(
-    //     (mem) => mem.tasks.length > 5
-    //   )
-    // ) {
-    //   alert("tasks of member is more,please select other member ");
-    //   return;
-    // }
+
     // //////
 
     //// create new todo API
@@ -88,13 +65,10 @@ function CreateTask({ ShowModal }) {
       title: "Created",
       newTodo: { ...NewTask },
     });
-    console.log(NewTask);
-    // updateOneMemberAPI(NewTask._id, {});
-    ///// change url
     // refresh page for display all todos
     setNewTask({
       title: "",
-      manager: "",
+      manager: [],
       complete: false,
       updatedOn: new Date(),
       createdOn: new Date(),
@@ -122,7 +96,7 @@ function CreateTask({ ShowModal }) {
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
+          {/* <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
             <Form.Select
               size="sm"
               onChange={(e) => {
@@ -141,6 +115,30 @@ function CreateTask({ ShowModal }) {
                 );
               })}
             </Form.Select>
+          </Form.Group> */}
+          <Form.Group className="check-box">
+            {AllMembers?.map((member, index) => {
+              return (
+                <Form.Check
+                  key={index + "custom-check"}
+                  type="switch"
+                  id={"custom-switch"}
+                  label={member.name}
+                  value={member.name}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setNewTask({
+                        ...NewTask,
+                        manager: [
+                          ...NewTask.manager,
+                          e.target.value?.trim().toLowerCase(),
+                        ],
+                      });
+                    }
+                  }}
+                />
+              );
+            })}
           </Form.Group>
         </Form>
       </Modal.Body>
