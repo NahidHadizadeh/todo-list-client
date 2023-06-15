@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../hooks/AddButton/useAddButton";
 import "../component/AddMember/addMember.css";
 import { useEffect, useState } from "react";
-import { getOneMemberAPI, updateOneMemberAPI } from "../API/membersAPI";
+import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewTodoAPI } from "../API/todoListAPI";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
@@ -25,14 +25,16 @@ function CreateTask({ ShowModal }) {
 
   useEffect(() => {
     if (NewTask.manager !== []) {
-      AllMembers.filter((member) => member.name === NewTask.manager).map(
-        (mem) => {
-          updateOneMemberAPI(mem._id, {
-            ...mem,
-            tasks: [...mem.tasks, NewTask.title],
-          });
-        }
-      );
+      NewTask.manager?.map((manage) => {
+        AllMembers.map((member) => {
+          if (member.name === manage) {
+            updateOneMemberAPI(member._id, {
+              ...member,
+              tasks: [...member.tasks, NewTask.title],
+            });
+          }
+        });
+      });
     }
   }, [NewTask]);
 
@@ -44,23 +46,18 @@ function CreateTask({ ShowModal }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // //////////validations
     // validatin title
     if (AllTasks.find((task) => task.title === NewTask.title)) {
       alert("this task is exist,select other task");
       return;
     }
-    if (NewTask.manager === "select manager" || NewTask.manager === "") {
+    if (NewTask.manager.length === 0) {
       alert("select manager");
       return;
     }
 
-    // //////
-
-    //// create new todo API
     await createNewTodoAPI(NewTask);
 
-    // ////create history for edit tasks
     await createNewHistoryAPI({
       title: "Created",
       newTodo: { ...NewTask },
