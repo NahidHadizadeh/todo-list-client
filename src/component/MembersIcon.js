@@ -10,9 +10,9 @@ function MembersIcon() {
             <div
               key={index}
               className={
-                "displayImage memberImage " +
-                "bgColor" +
-                (Math.floor(Math.random() * 7) + 1)
+                "displayImage memberImage " + "bgColor" + member.bgColor
+                  ? member.bgColor
+                  : Math.floor(Math.random() * 7) + 1
               }
             >
               {/* ---------------------- get first char of first name and lastname ,and show those */}
