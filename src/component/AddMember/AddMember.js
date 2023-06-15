@@ -22,6 +22,7 @@ function AddMember({ ShowModal }) {
     language: [],
     imageFile: {},
     tasks: [],
+    bgColor: 1,
     admin: false,
   });
   const [countSkills, setCountSkills] = useState(0);
@@ -55,7 +56,7 @@ function AddMember({ ShowModal }) {
     if (newSkill !== "") {
       setNewMember({
         ...NewMember,
-        skills: [...NewMember.skills, newSkill],
+        skills: [...NewMember.skills, { newSkill }],
       });
     } else {
       console.log("please inter title of skill");
@@ -63,6 +64,10 @@ function AddMember({ ShowModal }) {
     const showSkillElem = document.querySelector(".showSkill");
     showSkillElem.innerHTML += ` <span className="titleSkill">${newSkill}  </span>`;
     document.querySelector(".skillInput").value = "";
+    // ------------------------------------ add number random(1-8) for bg color icon in home page
+
+    setNewMember({ ...NewMember, bgColor: Math.floor(Math.random() * 7) + 1 });
+    // ------------------------------------- end add bg color
   }
 
   function handleCloseModal() {
@@ -70,7 +75,7 @@ function AddMember({ ShowModal }) {
     navigate("/members");
   }
   // handel submit form
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     // validation skills
     if (countSkills < 2) {
