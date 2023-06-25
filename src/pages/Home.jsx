@@ -7,6 +7,8 @@ import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 // import { FaUserCircle } from "react-icons/fa";
 import MembersIcon from "../component/MembersIcon";
+// import ListOfTodos from "../component/ListOfTodo/ListOfTodos";
+import ListOfTodos from "../component/ListOfTodo/ListOfTodos";
 
 function Home() {
   const dataBtn = useAddButton();
@@ -47,6 +49,7 @@ function Home() {
         </div>
 
         <TableProj />
+        <ListOfTodos />
       </div>
     </>
   );
