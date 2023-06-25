@@ -6,7 +6,6 @@ import CardHistory from "../component/CardHistory/CardHistory";
 function History() {
   // const AllChangeData = useAllChanging().AllChanging;
   const AllHistory = useAllHistory().AllHistory;
-  console.log(AllHistory);
   return (
     <>
       <NavbarProject />
