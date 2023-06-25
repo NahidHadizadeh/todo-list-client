@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../hooks/AddButton/useAddButton";
 import "../component/AddMember/addMember.css";
 import { useEffect, useState } from "react";
-import { getOneMemberAPI, updateOneMemberAPI } from "../API/membersAPI";
+import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewTodoAPI } from "../API/todoListAPI";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
@@ -17,38 +17,25 @@ function CreateTask({ ShowModal }) {
   const navigate = useNavigate();
   const [NewTask, setNewTask] = useState({
     title: "",
-    manager: "",
+    manager: [],
     complete: false,
     updatedOn: new Date(),
     createdOn: new Date(),
   });
 
   useEffect(() => {
-    console.log();
-    if (NewTask.manager !== "") {
-      // console.log(AllMembers.filter((mem) => mem.name === NewTask.manager));
-      AllMembers.filter((member) => member.name === NewTask.manager).map(
-        (mem) => {
-          console.log("mem");
-          updateOneMemberAPI(mem._id, {
-            ...mem,
-            tasks: [...mem.tasks, NewTask.title],
-            // tasks: [...mem.tasks, NewTask.title],
-          });
-        }
-      );
+    if (NewTask.manager !== []) {
+      NewTask.manager?.map((manage) => {
+        AllMembers.map((member) => {
+          if (member.name === manage) {
+            updateOneMemberAPI(member._id, {
+              ...member,
+              tasks: [...member.tasks, NewTask.title],
+            });
+          }
+        });
+      });
     }
-    // AllMembers.map((member) => {
-    //   console.log("mambers.map");
-    //   if (member.name === NewTask.manager) {
-    //     console.log("name===manager");
-    //     updateOneMemberAPI(member._id, {
-    //       ...member,
-    //       tasks: [...member.tasks, NewTask.title],
-    //     });
-    //   }
-    // });
-    // }
   }, [NewTask]);
 
   function handleCloseModal() {
@@ -58,43 +45,27 @@ function CreateTask({ ShowModal }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // setNewTask({ ...NewTask, updatedOn: new Date(), createdOn: new Date() });
 
-    // //////////validations
     // validatin title
     if (AllTasks.find((task) => task.title === NewTask.title)) {
       alert("this task is exist,select other task");
       return;
     }
-    if (NewTask.manager === "select manager" || NewTask.manager === "") {
+    if (NewTask.manager.length === 0) {
       alert("select manager");
       return;
     }
-    // if (
-    //   AllMembers.filter((member) => member?.name === NewTask?.manager).map(
-    //     (mem) => mem.tasks.length > 5
-    //   )
-    // ) {
-    //   alert("tasks of member is more,please select other member ");
-    //   return;
-    // }
-    // //////
 
-    //// create new todo API
     await createNewTodoAPI(NewTask);
 
-    // ////create history for edit tasks
     await createNewHistoryAPI({
       title: "Created",
       newTodo: { ...NewTask },
     });
-    console.log(NewTask);
-    // updateOneMemberAPI(NewTask._id, {});
-    ///// change url
     // refresh page for display all todos
     setNewTask({
       title: "",
-      manager: "",
+      manager: [],
       complete: false,
       updatedOn: new Date(),
       createdOn: new Date(),
@@ -122,7 +93,7 @@ function CreateTask({ ShowModal }) {
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
+          {/* <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
             <Form.Select
               size="sm"
               onChange={(e) => {
@@ -141,6 +112,30 @@ function CreateTask({ ShowModal }) {
                 );
               })}
             </Form.Select>
+          </Form.Group> */}
+          <Form.Group className="check-box">
+            {AllMembers?.map((member, index) => {
+              return (
+                <Form.Check
+                  key={index + "custom-check"}
+                  type="switch"
+                  id={"custom-switch"}
+                  label={member.name}
+                  value={member.name}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setNewTask({
+                        ...NewTask,
+                        manager: [
+                          ...NewTask.manager,
+                          e.target.value?.trim().toLowerCase(),
+                        ],
+                      });
+                    }
+                  }}
+                />
+              );
+            })}
           </Form.Group>
         </Form>
       </Modal.Body>

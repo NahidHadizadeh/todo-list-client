@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import EditTodo from "./EditTodo";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
+import MemberIconComponent from "./MemberIconComponent";
 
 function TableProj() {
   const [TodoForEdit, setTodoForEdit] = useState({});
@@ -28,13 +29,11 @@ function TableProj() {
     if (TaskIsComplete.manager) {
       updateOneTodoAPI(TaskIsComplete._id, {
         ...TaskIsComplete,
-        complete: !TaskIsComplete.complete,
+        complete: TaskIsComplete.complete ? false : true,
         updatedOn: new Date(),
       });
     }
-  }, [TaskIsComplete]);
-  useEffect(() => {
-    // ////create history for complete tasks
+    // add history comment after click complete btn
     if (TaskIsComplete !== {} && IsComplete === "click") {
       createNewHistoryAPI({
         title: TaskIsComplete?.complete ? "Don't Complete" : "Completed",
@@ -42,16 +41,22 @@ function TableProj() {
       });
       navigate(0);
     }
-  }, [IsComplete]);
+  }, [TaskIsComplete]);
 
   //  // handle delete task
   async function handleDelete(task) {
     await deleteOneTodoAPI(task._id);
-    AllMembers.filter((mem) => mem.name === task.title).map((member) => {
-      updateOneMemberAPI(member._id, {
-        ...member,
-        tasks: member.tasks.filter((tas) => tas !== task.title),
-      });
+    AllMembers.filter((mem) => {
+      if (mem.tasks.length > 0 && mem.name === task.manager) {
+        mem.tasks.map((taskOfMember) => {
+          if (taskOfMember === task.title) {
+            updateOneMemberAPI(mem._id, {
+              ...mem,
+              tasks: mem.tasks.filter((tas) => tas !== task.title),
+            });
+          }
+        });
+      }
     });
     // ////create history for delete tasks
     await createNewHistoryAPI({
@@ -90,6 +95,13 @@ function TableProj() {
                 className={task.complete ? "taskBox greenText" : "taskBox"}
               >
                 {task.title}
+                <div className="d-flex text-light">
+                  {AllMembers?.map((member) => {
+                    if (task.manager?.includes(member.name)) {
+                      return <MemberIconComponent member={member} />;
+                    }
+                  })}
+                </div>
                 <div key={index + "divv"} className="d-flex">
                   <button
                     className="btn btn-warning editBtn"
@@ -120,7 +132,10 @@ function TableProj() {
               {AllMembers?.map((member, index) => {
                 return (
                   <td key={index + "selectMember"} className="tdMembers">
-                    {task.manager === member.name ? "X" : ""}
+                    {/* {task.manager === member.name ? "X" : ""} */}
+                    {task.manager?.map((manage) => {
+                      return manage === member.name ? "X" : "";
+                    })}
                   </td>
                 );
               })}

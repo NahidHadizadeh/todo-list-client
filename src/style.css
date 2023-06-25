@@ -46,25 +46,60 @@ ul li {
   align-items: center;
   flex-wrap: wrap;
 }
+
+.listOfMembers {
+  margin-left: 0.5rem;
+}
+.memberImage {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  margin: 0.1rem;
+  /* border: 1px solid; */
+}
+.bgColor1 {
+  background-color: rgb(83, 160, 134);
+}
+.bgColor2 {
+  background-color: rgb(32, 65, 54);
+}
+.bgColor3 {
+  background-color: rgb(74, 125, 184);
+}
+.bgColor4 {
+  background-color: rgb(230, 164, 66);
+}
+.bgColor5 {
+  background-color: rgb(60, 28, 68);
+}
+.bgColor6 {
+  background-color: rgb(234, 144, 252);
+}
+.bgColor7 {
+  background-color: rgb(207, 80, 80);
+}
+.bgColor8 {
+  background-color: rgb(241, 227, 99);
+}
+.displayImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .adminImage {
   width: 2.5rem;
   height: 2.5rem;
   background-color: blueviolet;
   border-radius: 50%;
 }
-.adminBox {
-  display: block;
+/* --------------------------- check-box */
+.check-box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
-.listOfMembers {
-  margin-left: 0.5rem;
-}
-.listOfMembers .memberImage {
-  width: 2rem;
-  height: 2rem;
-  border: yellow;
-  border-radius: 50%;
-  background-color: aquamarine;
-  margin: 0.2rem;
+.form-check {
+  margin: 0 0.5rem;
 }
 h3 {
   text-align: center;
