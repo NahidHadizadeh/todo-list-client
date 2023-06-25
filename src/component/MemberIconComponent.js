@@ -3,6 +3,7 @@ import React from "react";
 export default function MemberIconComponent({ member }) {
   return (
     <div
+      title={member.name}
       key={member._id}
       className={"displayImage memberImage "
         .concat(" bgColor")
