@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import EditTodo from "./EditTodo";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
+import MemberIconComponent from "./MemberIconComponent";
 
 function TableProj() {
   const [TodoForEdit, setTodoForEdit] = useState({});
@@ -32,9 +33,7 @@ function TableProj() {
         updatedOn: new Date(),
       });
     }
-  }, [TaskIsComplete]);
-  useEffect(() => {
-    // ////create history for complete tasks
+    // add history comment after click complete btn
     if (TaskIsComplete !== {} && IsComplete === "click") {
       createNewHistoryAPI({
         title: TaskIsComplete?.complete ? "Don't Complete" : "Completed",
@@ -42,7 +41,7 @@ function TableProj() {
       });
       navigate(0);
     }
-  }, [IsComplete]);
+  }, [TaskIsComplete]);
 
   //  // handle delete task
   async function handleDelete(task) {
@@ -96,6 +95,13 @@ function TableProj() {
                 className={task.complete ? "taskBox greenText" : "taskBox"}
               >
                 {task.title}
+                <div className="d-flex text-light">
+                  {AllMembers?.map((member) => {
+                    if (task.manager?.includes(member.name)) {
+                      return <MemberIconComponent member={member} />;
+                    }
+                  })}
+                </div>
                 <div key={index + "divv"} className="d-flex">
                   <button
                     className="btn btn-warning editBtn"
