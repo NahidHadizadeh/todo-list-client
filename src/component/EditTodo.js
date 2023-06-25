@@ -2,44 +2,53 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { updateOneTodoAPI } from "../API/todoListAPI";
-// import useAddButton from "../hooks/AddButton/useAddButton";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
-// import useAllChanging from "../hooks/AllHistory/useAllHistory";
 
 function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
   const AllMembers = useAllMembers().AllMembers;
   const AllTasks = useAllTasks().AllTasks;
   // const AllChange = useAllChanging();
-
+  // const [isChecked,setIsChecked]=useState(false)
   const navigate = useNavigate();
   const [UpdateTodo, setUpdateTodo] = useState(TodoForEdit);
-  useEffect(() => {
-    setUpdateTodo(TodoForEdit);
-  }, [TodoForEdit]);
+  // useEffect(() => {
+  //   setUpdateTodo(TodoForEdit);
+  // }, [TodoForEdit]);
 
   // //// close modal
-  // const dataBtn = useAddButton();
   // ///// update member data base for tasks
   useEffect(() => {
-    if (UpdateTodo !== TodoForEdit && UpdateTodo._id) {
+    // if (UpdateTodo !== TodoForEdit && UpdateTodo._id) {
+
+    UpdateTodo.manager?.map((manage) => {
       AllMembers.map((member) => {
-        if (member.name === UpdateTodo.manager) {
+        if (member.name === manage) {
           updateOneMemberAPI(member._id, {
             ...member,
             tasks: [...member.tasks, UpdateTodo.title],
           });
-        } else {
-          console.log(member.tasks.filter((task) => task !== UpdateTodo.title));
-          updateOneMemberAPI(member._id, {
-            ...member,
-            tasks: member.tasks.filter((task) => task !== UpdateTodo.title),
-          });
         }
       });
-    }
+    });
+
+    // AllMembers.map((member) => {
+    //   if (member.name === UpdateTodo.manager) {
+    //     updateOneMemberAPI(member._id, {
+    //       ...member,
+    //       tasks: [...member.tasks, UpdateTodo.title],
+    //     });
+    //   } else {
+    //     console.log(member.tasks.filter((task) => task !== UpdateTodo.title));
+    //     updateOneMemberAPI(member._id, {
+    //       ...member,
+    //       tasks: member.tasks.filter((task) => task !== UpdateTodo.title),
+    //     });
+    //   }
+    // });
+    // }
   }, [UpdateTodo]);
 
   // handel submit form
@@ -94,6 +103,7 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
               }
             />
           </Form.Group>
+
           {/* <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
             <Form.Label>title:</Form.Label>
             <Form.Select
@@ -115,9 +125,77 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
               })}
             </Form.Select>
           </Form.Group> */}
-          <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
+
+          <Form.Group className="check-box">
             <Form.Label>manager:</Form.Label>
-            <Form.Select
+            {AllMembers?.map((member, index) => {
+              return (
+                <>
+                  <Form.Check
+                    // checked={TodoForEdit.manager?.map((manage) =>
+                    //   manage === member.name ? true : false
+                    // )}
+                    key={index + "custom-check"}
+                    type="switch"
+                    id={"custom-switch"}
+                    label={member.name}
+                    // value={
+                    // }
+                    // checked={isChecked}
+                    // checked={isChecked}
+                    onChange={(e) => {
+                      // UpdateTodo.manager?.includes(member.name)
+                      // ? setIsChecked(true)
+                      // : setIsChecked(false);
+                      // setIsChecked((prev)=>!prev)
+                      console.log(e.target.checked);
+                      // e.target.checked = !e.target.checked;
+                      if (e.target.checked) {
+                        if (
+                          UpdateTodo.manager.indexOf(
+                            member.name?.trim().toLowerCase()
+                          ) === -1
+                        ) {
+                          setUpdateTodo({
+                            ...UpdateTodo,
+                            manager: [
+                              ...UpdateTodo.manager,
+                              member.name?.trim().toLowerCase(),
+                            ],
+                          });
+                        } else {
+                          const arrManager = [...UpdateTodo.manager];
+                          arrManager.splice(
+                            arrManager.indexOf(
+                              member.name?.trim().toLowerCase()
+                            ),
+                            1
+                          );
+                          setUpdateTodo({
+                            ...UpdateTodo,
+                            manager: [...arrManager],
+                          });
+                          // alert("this manager is exit,select again");
+                        }
+                        // e.target.checked = false;
+                      }
+                    }}
+                  />
+                  {/* // ------------------------------- */}
+                  {/* {AllMembers.map(member=>{
+                  return (
+                  <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                  <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
+                </div>)
+                })} */}
+                </>
+              );
+            })}
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
+            {/* <Form.Select
               size="sm"
               value={UpdateTodo.manager?.trim().toLowerCase()}
               onChange={(e) => {
@@ -134,7 +212,7 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
                   </option>
                 );
               })}
-            </Form.Select>
+            </Form.Select> */}
           </Form.Group>
         </Form>
       </Modal.Body>
