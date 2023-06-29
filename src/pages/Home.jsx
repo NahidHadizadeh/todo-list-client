@@ -47,8 +47,9 @@ function Home() {
             total tasks : {AllTasks.length}
           </label>
         </div>
-
-        <TableProj />
+        {/* -------------------------- used "TableProj" component */}
+        {/* <TableProj /> */}
+        {/* -------------------------- use"ListOfTodos" component */}
         <ListOfTodos />
       </div>
     </>
