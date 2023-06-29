@@ -14,7 +14,8 @@ export default function ListOfTodos() {
   return (
     <section>
       <div className="main-row">
-        <Col sm={12} md={6} lg={4} xl={4} className="columns-todo">
+        {/* sm={12} md={6} lg={4} xl={4} */}
+        <Col className="columns-todo col-12">
           {AllTasks?.map((task, index) => {
             return (
               <div key={index + "tasks"} className="todo-box">
@@ -64,12 +65,12 @@ export default function ListOfTodos() {
             );
           })}
         </Col>
-        <Col sm={12} md={6} lg={4} xl={3} className="columns-todo">
+        {/* <Col sm={12} md={6} lg={4} xl={3} className="columns-todo">
           2
         </Col>
         <Col sm={12} md={6} lg={4} xl={3} className="columns-todo">
           3
-        </Col>
+        </Col> */}
         {/* <Col sm={12} md={6} lg={4} xl={3} className="columns-todo">
           4
         </Col> */}
