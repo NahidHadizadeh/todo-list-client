@@ -25,23 +25,19 @@ function TableProj() {
   const navigate = useNavigate();
   const [TaskIsComplete, setTaskIsComplete] = useState({});
   const [IsComplete, setIsComplete] = useState("");
-  useEffect(() => {
-    if (TaskIsComplete.manager) {
-      updateOneTodoAPI(TaskIsComplete._id, {
-        ...TaskIsComplete,
-        complete: TaskIsComplete.complete ? false : true,
-        updatedOn: new Date(),
-      });
-    }
-    // add history comment after click complete btn
-    if (TaskIsComplete !== {} && IsComplete === "click") {
-      createNewHistoryAPI({
-        title: TaskIsComplete?.complete ? "Don't Complete" : "Completed",
-        newTodo: { ...TaskIsComplete },
-      });
-      navigate(0);
-    }
-  }, [TaskIsComplete]);
+
+  async function handleComplete(task) {
+    updateOneTodoAPI(task._id, {
+      ...task,
+      complete: task.complete ? false : true,
+      updatedOn: new Date(),
+    });
+    createNewHistoryAPI({
+      title: task?.complete ? "Don't Complete" : "Completed",
+      newTodo: { ...task },
+    });
+    navigate(0);
+  }
 
   //  // handle delete task
   async function handleDelete(task) {
@@ -123,6 +119,7 @@ function TableProj() {
                     onClick={() => {
                       setIsComplete("click");
                       setTaskIsComplete(task);
+                      handleComplete(task);
                     }}
                   >
                     <GrCompliance />
