@@ -63,13 +63,6 @@ function CreateTask({ ShowModal }) {
       newTodo: { ...NewTask },
     });
     // refresh page for display all todos
-    setNewTask({
-      title: "",
-      manager: [],
-      complete: false,
-      updatedOn: new Date(),
-      createdOn: new Date(),
-    });
     navigate("/");
     navigate(0);
   }
