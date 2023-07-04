@@ -4,7 +4,7 @@ export default function MemberIconComponent({ member }) {
   return (
     <div
       title={member.name}
-      key={member._id}
+      key={member._id + "memberr"}
       className={"displayImage memberImage "
         .concat(" bgColor")
         .concat(
