@@ -86,26 +86,6 @@ function CreateTask({ ShowModal }) {
               }
             />
           </Form.Group>
-          {/* <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
-            <Form.Select
-              size="sm"
-              onChange={(e) => {
-                setNewTask({
-                  ...NewTask,
-                  manager: e.target.value?.trim().toLowerCase(),
-                });
-              }}
-            >
-              <option value="select manager">select maager</option>
-              {AllMembers?.map((member, index) => {
-                return (
-                  <option key={index + "option"} value={member.name}>
-                    {member.name}
-                  </option>
-                );
-              })}
-            </Form.Select>
-          </Form.Group> */}
           <Form.Group className="check-box">
             {AllMembers?.map((member, index) => {
               return (
