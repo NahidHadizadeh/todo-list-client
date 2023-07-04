@@ -43,7 +43,7 @@ function TableProj() {
   async function handleDelete(task) {
     await deleteOneTodoAPI(task._id);
     AllMembers.filter((mem) => {
-      if (mem.tasks.length > 0 && mem.name === task.manager) {
+      if (mem.tasks.length > 0 && task.manager.includes(mem.name)) {
         mem.tasks.map((taskOfMember) => {
           if (taskOfMember === task.title) {
             updateOneMemberAPI(mem._id, {
@@ -85,7 +85,7 @@ function TableProj() {
       <tbody>
         {AllTasks?.map((task, index) => {
           return (
-            <tr key={index}>
+            <tr key={index + "task"}>
               <td
                 colSpan={2}
                 className={task.complete ? "taskBox greenText" : "taskBox"}
