@@ -3,92 +3,63 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { updateOneTodoAPI } from "../API/todoListAPI";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
-import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
 
 function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
   const AllMembers = useAllMembers().AllMembers;
-  const AllTasks = useAllTasks().AllTasks;
-  // const AllChange = useAllChanging();
   const [isChecked, setIsChecked] = useState([]);
   const navigate = useNavigate();
-  const [UpdateTodo, setUpdateTodo] = useState({ ...TodoForEdit });
+  const [UpdateTodo, setUpdateTodo] = useState();
 
   // --------------- ترو کردن چک باکس مربوط به منیجرهای یک تسک
   useEffect(() => {
     setIsChecked(
       AllMembers.map((member) => {
-        console.log(TodoForEdit?.manager);
         if (TodoForEdit?.manager?.includes(member.name)) {
           console.log(member.name);
           return true;
         } else return false;
       })
     );
+    setUpdateTodo({ ...TodoForEdit });
   }, [TodoForEdit]);
   // ------------------------------- پایان
 
-  // setIsChecked(
-  //   AllMembers.map((member) => {
-  //     if (TodoForEdit?.manager?.inclueds(member.name)) return true;
-  //     else return false;
-  //   })
-  // );
-  // //// close modal
-  // ///// update member data base for tasks
-  useEffect(() => {
-    // if (UpdateTodo !== TodoForEdit && UpdateTodo._id) {
-
-    UpdateTodo.manager?.map((manage) => {
-      AllMembers.map((member) => {
-        if (
-          member.name === manage &&
-          !member.tasks.includes(UpdateTodo.title)
-        ) {
-          updateOneMemberAPI(member._id, {
-            ...member,
-            tasks: [...member.tasks, UpdateTodo.title],
-          });
-        }
+  function handleIsChecked(index, member) {
+    const changeIsChecked = [...isChecked];
+    changeIsChecked[index] = !changeIsChecked[index];
+    setIsChecked(changeIsChecked);
+    // -------------------- add member that checked's member is true
+    if (changeIsChecked[index] && !member.tasks?.includes(UpdateTodo.title)) {
+      setUpdateTodo({
+        ...UpdateTodo,
+        manager: [...UpdateTodo.manager, member.name],
       });
-    });
-
-    // AllMembers.map((member) => {
-    //   if (member.name === UpdateTodo.manager) {
-    //     updateOneMemberAPI(member._id, {
-    //       ...member,
-    //       tasks: [...member.tasks, UpdateTodo.title],
-    //     });
-    //   } else {
-    //     console.log(member.tasks.filter((task) => task !== UpdateTodo.title));
-    //     updateOneMemberAPI(member._id, {
-    //       ...member,
-    //       tasks: member.tasks.filter((task) => task !== UpdateTodo.title),
-    //     });
-    //   }
-    // });
-    // }
-  }, [UpdateTodo]);
-  const [arr, setArr] = useState([]);
-  useEffect(() => {
-    setUpdateTodo({
-      ...TodoForEdit,
-      manager: [...arr],
-    });
-  }, [arr]);
+      // -------------------- and remove member that checked's member is false
+    } else if (
+      !changeIsChecked[index] &&
+      member.tasks?.includes(UpdateTodo.title)
+    ) {
+      let filterManagerArr = UpdateTodo.manager?.filter(
+        (manage) => manage !== member.name
+      );
+      console.log(filterManagerArr);
+      setUpdateTodo({ ...UpdateTodo, manager: [...filterManagerArr] });
+    }
+  }
 
   // handel submit form
   async function handleSubmit(e) {
-    e.preventDefault();
     console.log(UpdateTodo);
-    // //////////validations
+    e.preventDefault();
     // validatin title
-    if (UpdateTodo.title === "select task" || UpdateTodo.title === "") {
+    if (TodoForEdit.title === "select task" || TodoForEdit.title === "") {
       alert("this task is exist,select other task");
       return;
     }
-    if (UpdateTodo.manager === "select manager" || UpdateTodo.manager === "") {
+    // if(UpdateTodo.title===)
+    if (UpdateTodo.manager?.length === 0) {
       alert("select manager");
       return;
     }
@@ -97,6 +68,27 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     // setUpdateTodo({ ...UpdateTodo, updateOn: new Date() });
 
     await updateOneTodoAPI(TodoForEdit._id, UpdateTodo);
+
+    AllMembers?.map((member) => {
+      if (
+        UpdateTodo.manager?.includes(member.name) &&
+        !member.tasks?.includes(UpdateTodo.title)
+      ) {
+        alert(member.name);
+        updateOneMemberAPI(member._id, {
+          ...member,
+          tasks: [...member.tasks, UpdateTodo.title],
+        });
+      } else if (
+        !UpdateTodo.manager?.includes(member.name) &&
+        member.tasks?.includes(UpdateTodo.title)
+      ) {
+        updateOneMemberAPI(member._id, {
+          ...member,
+          tasks: [...member.tasks?.filter((task) => task !== UpdateTodo.title)],
+        });
+      }
+    });
 
     // ////create history for edit tasks
     await createNewHistoryAPI({
@@ -114,22 +106,6 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     // setUpdateTodo({});
   }
 
-  function handleIsChecked(index) {
-    const changeIsChecked = [...isChecked];
-    changeIsChecked[index] = !changeIsChecked[index];
-    setIsChecked(changeIsChecked);
-    AllMembers.map((member, index) => {
-      // const arr = [];
-      if (
-        changeIsChecked[index] ||
-        TodoForEdit.manager?.includes(member.name)
-      ) {
-        alert(member.name);
-        setArr([...arr, member.name]);
-      }
-    });
-  }
-
   return (
     <Modal show={ShowModal} onHide={handleCloseModal}>
       <Modal.Header closeButton>
@@ -145,7 +121,7 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
               // autoFocus
               value={TodoForEdit.title}
               onChange={(e) =>
-                setUpdateTodo({ ...TodoForEdit, title: e.target.value })
+                setUpdateTodo({ ...UpdateTodo, title: e.target.value })
               }
             />
           </Form.Group>
@@ -158,7 +134,6 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
             <Form.Label>manager:</Form.Label>
 
             {AllMembers?.map((member, index) => {
-              console.log(isChecked[index]);
               return (
                 <>
                   <Form.Check
@@ -168,7 +143,7 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
                     label={member.name}
                     value={member.name.trim().toLowerCase()}
                     onChange={(e) => {
-                      handleIsChecked(index, e);
+                      handleIsChecked(index, member);
 
                       //   // else if (
                       //   //   !UpdateTodo?.manager?.includes(e.target.value)
