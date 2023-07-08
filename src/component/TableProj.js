@@ -41,20 +41,19 @@ function TableProj() {
 
   //  // handle delete task
   async function handleDelete(task) {
+    // ------ delete task
     await deleteOneTodoAPI(task._id);
-    AllMembers.filter((mem) => {
-      if (mem.tasks.length > 0 && task.manager.includes(mem.name)) {
-        mem.tasks.map((taskOfMember) => {
-          if (taskOfMember === task.title) {
-            updateOneMemberAPI(mem._id, {
-              ...mem,
-              tasks: mem.tasks.filter((tas) => tas !== task.title),
-            });
-          }
+
+    // ------ edit task's member after delete task
+    AllMembers?.map((member) => {
+      if (task.manager?.includes(member.name)) {
+        updateOneMemberAPI(member._id, {
+          ...member,
+          tasks: member.tasks.filter((tas) => tas !== task.title),
         });
       }
     });
-    // ////create history for delete tasks
+    //create history for delete tasks
     await createNewHistoryAPI({
       title: "Deleted",
       newTodo: { ...task },
