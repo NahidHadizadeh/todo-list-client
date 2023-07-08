@@ -3,9 +3,7 @@ import "./cardHistory.css";
 import { Card } from "react-bootstrap";
 
 function CardHistory() {
-  console.log("cardHistory");
   const AllHistory = useAllHistory().AllHistory;
-  console.log(AllHistory);
   if (AllHistory) {
     return (
       <>

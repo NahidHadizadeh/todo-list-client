@@ -25,40 +25,35 @@ function TableProj() {
   const navigate = useNavigate();
   const [TaskIsComplete, setTaskIsComplete] = useState({});
   const [IsComplete, setIsComplete] = useState("");
-  useEffect(() => {
-    if (TaskIsComplete.manager) {
-      updateOneTodoAPI(TaskIsComplete._id, {
-        ...TaskIsComplete,
-        complete: TaskIsComplete.complete ? false : true,
-        updatedOn: new Date(),
-      });
-    }
-    // add history comment after click complete btn
-    if (TaskIsComplete !== {} && IsComplete === "click") {
-      createNewHistoryAPI({
-        title: TaskIsComplete?.complete ? "Don't Complete" : "Completed",
-        newTodo: { ...TaskIsComplete },
-      });
-      navigate(0);
-    }
-  }, [TaskIsComplete]);
+
+  async function handleComplete(task) {
+    updateOneTodoAPI(task._id, {
+      ...task,
+      complete: task.complete ? false : true,
+      updatedOn: new Date(),
+    });
+    createNewHistoryAPI({
+      title: task?.complete ? "Don't Complete" : "Completed",
+      newTodo: { ...task },
+    });
+    navigate(0);
+  }
 
   //  // handle delete task
   async function handleDelete(task) {
+    // ------ delete task
     await deleteOneTodoAPI(task._id);
-    AllMembers.filter((mem) => {
-      if (mem.tasks.length > 0 && mem.name === task.manager) {
-        mem.tasks.map((taskOfMember) => {
-          if (taskOfMember === task.title) {
-            updateOneMemberAPI(mem._id, {
-              ...mem,
-              tasks: mem.tasks.filter((tas) => tas !== task.title),
-            });
-          }
+
+    // ------ edit task's member after delete task
+    AllMembers?.map((member) => {
+      if (task.manager?.includes(member.name)) {
+        updateOneMemberAPI(member._id, {
+          ...member,
+          tasks: member.tasks.filter((tas) => tas !== task.title),
         });
       }
     });
-    // ////create history for delete tasks
+    //create history for delete tasks
     await createNewHistoryAPI({
       title: "Deleted",
       newTodo: { ...task },
@@ -89,7 +84,7 @@ function TableProj() {
       <tbody>
         {AllTasks?.map((task, index) => {
           return (
-            <tr key={index}>
+            <tr key={index + "task"}>
               <td
                 colSpan={2}
                 className={task.complete ? "taskBox greenText" : "taskBox"}
@@ -123,6 +118,7 @@ function TableProj() {
                     onClick={() => {
                       setIsComplete("click");
                       setTaskIsComplete(task);
+                      handleComplete(task);
                     }}
                   >
                     <GrCompliance />

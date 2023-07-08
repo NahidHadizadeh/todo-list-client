@@ -11,13 +11,30 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
   const AllMembers = useAllMembers().AllMembers;
   const AllTasks = useAllTasks().AllTasks;
   // const AllChange = useAllChanging();
-  // const [isChecked,setIsChecked]=useState(false)
+  const [isChecked, setIsChecked] = useState([]);
   const navigate = useNavigate();
-  const [UpdateTodo, setUpdateTodo] = useState(TodoForEdit);
-  // useEffect(() => {
-  //   setUpdateTodo(TodoForEdit);
-  // }, [TodoForEdit]);
+  const [UpdateTodo, setUpdateTodo] = useState({ ...TodoForEdit });
 
+  // --------------- ترو کردن چک باکس مربوط به منیجرهای یک تسک
+  useEffect(() => {
+    setIsChecked(
+      AllMembers.map((member) => {
+        console.log(TodoForEdit?.manager);
+        if (TodoForEdit?.manager?.includes(member.name)) {
+          console.log(member.name);
+          return true;
+        } else return false;
+      })
+    );
+  }, [TodoForEdit]);
+  // ------------------------------- پایان
+
+  // setIsChecked(
+  //   AllMembers.map((member) => {
+  //     if (TodoForEdit?.manager?.inclueds(member.name)) return true;
+  //     else return false;
+  //   })
+  // );
   // //// close modal
   // ///// update member data base for tasks
   useEffect(() => {
@@ -25,7 +42,10 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
 
     UpdateTodo.manager?.map((manage) => {
       AllMembers.map((member) => {
-        if (member.name === manage) {
+        if (
+          member.name === manage &&
+          !member.tasks.includes(UpdateTodo.title)
+        ) {
           updateOneMemberAPI(member._id, {
             ...member,
             tasks: [...member.tasks, UpdateTodo.title],
@@ -50,11 +70,18 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     // });
     // }
   }, [UpdateTodo]);
+  const [arr, setArr] = useState([]);
+  useEffect(() => {
+    setUpdateTodo({
+      ...TodoForEdit,
+      manager: [...arr],
+    });
+  }, [arr]);
 
   // handel submit form
   async function handleSubmit(e) {
     e.preventDefault();
-
+    console.log(UpdateTodo);
     // //////////validations
     // validatin title
     if (UpdateTodo.title === "select task" || UpdateTodo.title === "") {
@@ -67,8 +94,9 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     }
     // close modal
     handleCloseModal();
-    setUpdateTodo({ ...UpdateTodo, updateOn: new Date() });
-    updateOneTodoAPI(TodoForEdit._id, UpdateTodo);
+    // setUpdateTodo({ ...UpdateTodo, updateOn: new Date() });
+
+    await updateOneTodoAPI(TodoForEdit._id, UpdateTodo);
 
     // ////create history for edit tasks
     await createNewHistoryAPI({
@@ -76,12 +104,30 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
       newTodo: { ...UpdateTodo },
       todoForEdit: { ...TodoForEdit },
     });
+
+    // setArr([]);
     // change url
     navigate(0);
     navigate("/");
 
     // set initioal value for todo
-    setUpdateTodo({});
+    // setUpdateTodo({});
+  }
+
+  function handleIsChecked(index) {
+    const changeIsChecked = [...isChecked];
+    changeIsChecked[index] = !changeIsChecked[index];
+    setIsChecked(changeIsChecked);
+    AllMembers.map((member, index) => {
+      // const arr = [];
+      if (
+        changeIsChecked[index] ||
+        TodoForEdit.manager?.includes(member.name)
+      ) {
+        alert(member.name);
+        setArr([...arr, member.name]);
+      }
+    });
   }
 
   return (
@@ -99,86 +145,40 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
               // autoFocus
               value={TodoForEdit.title}
               onChange={(e) =>
-                setUpdateTodo({ ...UpdateTodo, title: e.target.value })
+                setUpdateTodo({ ...TodoForEdit, title: e.target.value })
               }
             />
           </Form.Group>
-
-          {/* <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
-            <Form.Label>title:</Form.Label>
-            <Form.Select
-              size="sm"
-              value={UpdateTodo.title?.trim()?.toLowerCase()}
-              onChange={(e) => {
-                setUpdateTodo({
-                  ...UpdateTodo,
-                  title: e.target.value?.trim().toLowerCase(),
-                });
-              }}
-            >
-              {AllTasks?.map((task, index) => {
-                return (
-                  <option key={index + "option"} value={task.title}>
-                    {task.title}
-                  </option>
-                );
-              })}
-            </Form.Select>
-          </Form.Group> */}
+          {/* ----------------- display name of managers */}
+          {TodoForEdit.manager?.map((manage) => {
+            return <span className="m-1">{manage}</span>;
+          })}
 
           <Form.Group className="check-box">
             <Form.Label>manager:</Form.Label>
+
             {AllMembers?.map((member, index) => {
+              console.log(isChecked[index]);
               return (
                 <>
                   <Form.Check
-                    // checked={TodoForEdit.manager?.map((manage) =>
-                    //   manage === member.name ? true : false
-                    // )}
+                    checked={isChecked[index]}
                     key={index + "custom-check"}
                     type="switch"
-                    id={"custom-switch"}
                     label={member.name}
-                    // value={
-                    // }
-                    // checked={isChecked}
-                    // checked={isChecked}
+                    value={member.name.trim().toLowerCase()}
                     onChange={(e) => {
-                      // UpdateTodo.manager?.includes(member.name)
-                      // ? setIsChecked(true)
-                      // : setIsChecked(false);
-                      // setIsChecked((prev)=>!prev)
-                      console.log(e.target.checked);
-                      // e.target.checked = !e.target.checked;
-                      if (e.target.checked) {
-                        if (
-                          UpdateTodo.manager.indexOf(
-                            member.name?.trim().toLowerCase()
-                          ) === -1
-                        ) {
-                          setUpdateTodo({
-                            ...UpdateTodo,
-                            manager: [
-                              ...UpdateTodo.manager,
-                              member.name?.trim().toLowerCase(),
-                            ],
-                          });
-                        } else {
-                          const arrManager = [...UpdateTodo.manager];
-                          arrManager.splice(
-                            arrManager.indexOf(
-                              member.name?.trim().toLowerCase()
-                            ),
-                            1
-                          );
-                          setUpdateTodo({
-                            ...UpdateTodo,
-                            manager: [...arrManager],
-                          });
-                          // alert("this manager is exit,select again");
-                        }
-                        // e.target.checked = false;
-                      }
+                      handleIsChecked(index, e);
+
+                      //   // else if (
+                      //   //   !UpdateTodo?.manager?.includes(e.target.value)
+                      //   // ) {
+                      //   //   alert("update shamle valu nis");
+                      //   //   setUpdateTodo({
+                      //   //     ...TodoForEdit,
+                      //   //     manager: [...TodoForEdit.manager, e.target.value],
+                      //   //   });
+                      //   // }
                     }}
                   />
                   {/* // ------------------------------- */}
@@ -192,27 +192,6 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
                 </>
               );
             })}
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="ageForm.ControlInput1">
-            {/* <Form.Select
-              size="sm"
-              value={UpdateTodo.manager?.trim().toLowerCase()}
-              onChange={(e) => {
-                setUpdateTodo({
-                  ...UpdateTodo,
-                  manager: e.target.value?.trim().toLowerCase(),
-                });
-              }}
-            >
-              {AllMembers?.map((member, index) => {
-                return (
-                  <option key={index + "option"} value={member.name}>
-                    {member.name}
-                  </option>
-                );
-              })}
-            </Form.Select> */}
           </Form.Group>
         </Form>
       </Modal.Body>
