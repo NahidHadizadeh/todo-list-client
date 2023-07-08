@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../hooks/AddButton/useAddButton";
 import "../component/AddMember/addMember.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewTodoAPI } from "../API/todoListAPI";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
@@ -23,21 +23,6 @@ function CreateTask({ ShowModal }) {
     createdOn: new Date(),
   });
 
-  useEffect(() => {
-    if (NewTask.manager !== []) {
-      NewTask.manager?.map((manage) => {
-        AllMembers.map((member) => {
-          if (member.name === manage) {
-            updateOneMemberAPI(member._id, {
-              ...member,
-              tasks: [...member.tasks, NewTask.title],
-            });
-          }
-        });
-      });
-    }
-  }, [NewTask]);
-
   function handleCloseModal() {
     dataBtn.setShowModal(false);
     navigate("/");
@@ -45,7 +30,6 @@ function CreateTask({ ShowModal }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     // validatin title
     if (AllTasks.find((task) => task.title === NewTask.title)) {
       alert("this task is exist,select other task");
@@ -57,7 +41,19 @@ function CreateTask({ ShowModal }) {
     }
 
     await createNewTodoAPI(NewTask);
-
+    // ---------------------- update task of member
+    AllMembers?.map((member) => {
+      if (
+        NewTask?.manager?.includes(member.name) &&
+        !member.tasks?.includes(NewTask.title)
+      ) {
+        updateOneMemberAPI(member._id, {
+          ...member,
+          tasks: [...member.tasks, NewTask.title],
+        });
+      }
+    });
+    // --------------------------------- end update
     await createNewHistoryAPI({
       title: "Created",
       newTodo: { ...NewTask },
@@ -103,6 +99,16 @@ function CreateTask({ ShowModal }) {
                           ...NewTask.manager,
                           e.target.value?.trim().toLowerCase(),
                         ],
+                      });
+                    } else {
+                      //--------------- delete manager that checked is false
+                      const newTaskManagerArr = NewTask.manager?.filter(
+                        (manage) =>
+                          !(manage === e.target.value?.trim().toLowerCase())
+                      );
+                      setNewTask({
+                        ...NewTask,
+                        manager: [...newTaskManagerArr],
                       });
                     }
                   }}
