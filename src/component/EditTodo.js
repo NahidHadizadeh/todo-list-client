@@ -5,12 +5,14 @@ import { updateOneTodoAPI } from "../API/todoListAPI";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
+import { AiOutlineEdit } from "react-icons/ai";
 
-function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
+function EditTodo({ TodoForEdit }) {
   const AllMembers = useAllMembers().AllMembers;
   const [isChecked, setIsChecked] = useState([]);
   const navigate = useNavigate();
   const [UpdateTodo, setUpdateTodo] = useState();
+  const [ShowModal, setShowModal] = useState(false);
 
   // --------------- ترو کردن چک باکس مربوط به منیجرهای یک تسک
   useEffect(() => {
@@ -24,6 +26,10 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     setUpdateTodo({ ...TodoForEdit });
   }, [TodoForEdit]);
   // ------------------------------- پایان
+  function handleCloseModal() {
+    setShowModal(false);
+    navigate("/");
+  }
 
   function handleIsChecked(index, member) {
     const changeIsChecked = [...isChecked];
@@ -53,7 +59,6 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
       alert("this task is exist,select other task");
       return;
     }
-    // if(UpdateTodo.title===)
     if (UpdateTodo.manager?.length === 0) {
       alert("select manager");
       return;
@@ -97,78 +102,71 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
   }
 
   return (
-    <Modal show={ShowModal} onHide={handleCloseModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>title:</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="enter task title"
-              // autoFocus
-              value={TodoForEdit.title}
-              onChange={(e) =>
-                setUpdateTodo({ ...UpdateTodo, title: e.target.value })
-              }
-            />
-          </Form.Group>
-          {/* ----------------- display name of managers */}
-          {TodoForEdit.manager?.map((manage) => {
-            return <span className="m-1">{manage}</span>;
-          })}
+    <>
+      {/* ------------ edit button  */}
+      <button
+        className="btn btn-warning "
+        onClick={() => {
+          setShowModal(true);
+        }}
+      >
+        <AiOutlineEdit />
+      </button>
 
-          <Form.Group className="check-box">
-            <Form.Label>manager:</Form.Label>
-
-            {AllMembers?.map((member, index) => {
-              return (
-                <>
-                  <Form.Check
-                    checked={isChecked[index]}
-                    key={index + "custom-check"}
-                    type="switch"
-                    label={member.name}
-                    value={member.name.trim().toLowerCase()}
-                    onChange={(e) => {
-                      handleIsChecked(index, member);
-
-                      //   // else if (
-                      //   //   !UpdateTodo?.manager?.includes(e.target.value)
-                      //   // ) {
-                      //   //   alert("update shamle valu nis");
-                      //   //   setUpdateTodo({
-                      //   //     ...TodoForEdit,
-                      //   //     manager: [...TodoForEdit.manager, e.target.value],
-                      //   //   });
-                      //   // }
-                    }}
-                  />
-                  {/* // ------------------------------- */}
-                  {/* {AllMembers.map(member=>{
-                  return (
-                  <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                  <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
-                </div>)
-                })} */}
-                </>
-              );
+      <Modal show={ShowModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>title:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="enter task title"
+                value={TodoForEdit.title}
+                onChange={(e) =>
+                  setUpdateTodo({ ...UpdateTodo, title: e.target.value })
+                }
+              />
+            </Form.Group>
+            {/* ----------------- display name of managers */}
+            {TodoForEdit.manager?.map((manage) => {
+              return <span className="m-1">{manage}</span>;
             })}
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Update
-        </Button>
-      </Modal.Footer>
-    </Modal>
+
+            <Form.Group className="check-box">
+              <Form.Label>manager:</Form.Label>
+
+              {AllMembers?.map((member, index) => {
+                return (
+                  <>
+                    <Form.Check
+                      checked={isChecked[index]}
+                      key={index + "custom-check"}
+                      type="switch"
+                      label={member.name}
+                      value={member.name.trim().toLowerCase()}
+                      onChange={(e) => {
+                        handleIsChecked(index, member);
+                      }}
+                    />
+                  </>
+                );
+              })}
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Update
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 
