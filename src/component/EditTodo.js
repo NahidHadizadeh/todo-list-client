@@ -17,7 +17,6 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     setIsChecked(
       AllMembers.map((member) => {
         if (TodoForEdit?.manager?.includes(member.name)) {
-          console.log(member.name);
           return true;
         } else return false;
       })
@@ -31,27 +30,23 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     changeIsChecked[index] = !changeIsChecked[index];
     setIsChecked(changeIsChecked);
     // -------------------- add member that checked's member is true
-    if (changeIsChecked[index] && !member.tasks?.includes(UpdateTodo.title)) {
+
+    if (changeIsChecked[index]) {
       setUpdateTodo({
         ...UpdateTodo,
         manager: [...UpdateTodo.manager, member.name],
       });
       // -------------------- and remove member that checked's member is false
-    } else if (
-      !changeIsChecked[index] &&
-      member.tasks?.includes(UpdateTodo.title)
-    ) {
+    } else {
       let filterManagerArr = UpdateTodo.manager?.filter(
         (manage) => manage !== member.name
       );
-      console.log(filterManagerArr);
       setUpdateTodo({ ...UpdateTodo, manager: [...filterManagerArr] });
     }
   }
 
   // handel submit form
   async function handleSubmit(e) {
-    console.log(UpdateTodo);
     e.preventDefault();
     // validatin title
     if (TodoForEdit.title === "select task" || TodoForEdit.title === "") {
@@ -65,16 +60,14 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
     }
     // close modal
     handleCloseModal();
-    // setUpdateTodo({ ...UpdateTodo, updateOn: new Date() });
 
     await updateOneTodoAPI(TodoForEdit._id, UpdateTodo);
-
+    // ------------- update task of member api
     AllMembers?.map((member) => {
       if (
         UpdateTodo.manager?.includes(member.name) &&
         !member.tasks?.includes(UpdateTodo.title)
       ) {
-        alert(member.name);
         updateOneMemberAPI(member._id, {
           ...member,
           tasks: [...member.tasks, UpdateTodo.title],
@@ -89,21 +82,18 @@ function EditTodo({ ShowModal, TodoForEdit, handleCloseModal }) {
         });
       }
     });
+    // ------------- end update task of member api
 
-    // ////create history for edit tasks
+    // create history for edit tasks
     await createNewHistoryAPI({
       title: "edited",
       newTodo: { ...UpdateTodo },
       todoForEdit: { ...TodoForEdit },
     });
 
-    // setArr([]);
     // change url
     navigate(0);
     navigate("/");
-
-    // set initioal value for todo
-    // setUpdateTodo({});
   }
 
   return (
