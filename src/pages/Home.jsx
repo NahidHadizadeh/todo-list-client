@@ -29,7 +29,9 @@ function Home() {
                   return (
                     <div
                       key={"admin" + index}
-                      className="displayImage adminImage"
+                      className={"displayImage adminImage bgColor".concat(
+                        member.bgColor
+                      )}
                     >
                       {member.name.slice(0, 2).toUpperCase()}
                     </div>
