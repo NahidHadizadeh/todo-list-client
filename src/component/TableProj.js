@@ -16,11 +16,11 @@ function TableProj() {
 
   const AllTasks = useAllTasks().AllTasks;
   const AllMembers = useAllMembers().AllMembers;
-  const [showModal, setShowModal] = useState(false);
-  function handleCloseModal() {
-    setShowModal(false);
-    navigate("/");
-  }
+  // const [showModal, setShowModal] = useState(false);
+  // function handleCloseModal() {
+  //   setShowModal(false);
+  //   navigate("/");
+  // }
   //   // // handle isCompleted task
   const navigate = useNavigate();
   const [TaskIsComplete, setTaskIsComplete] = useState({});
@@ -63,11 +63,11 @@ function TableProj() {
 
   return (
     <Table striped bordered hover variant="dark">
-      <EditTodo
+      {/* <EditTodo
         ShowModal={showModal}
         TodoForEdit={TodoForEdit}
         handleCloseModal={handleCloseModal}
-      />
+      /> */}
 
       <thead>
         <tr>
@@ -98,15 +98,9 @@ function TableProj() {
                   })}
                 </div>
                 <div key={index + "divv"} className="d-flex">
-                  <button
-                    className="btn btn-warning editBtn"
-                    onClick={() => {
-                      setShowModal(true);
-                      setTodoForEdit(task);
-                    }}
-                  >
-                    <AiOutlineEdit />
-                  </button>
+                  {/* --------------------- edit btn that is modal component */}
+                  <EditTodo TodoForEdit={task} />
+                  {/* --------------------- end edit btn... */}
                   <button
                     className="btn btn-danger deleteBtn"
                     onClick={() => handleDelete(task)}
