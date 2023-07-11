@@ -40,7 +40,7 @@ function CreateTask({ ShowModal }) {
       return;
     }
 
-    await createNewTodoAPI(NewTask);
+    await createNewTodoAPI({ ...NewTask, title: NewTask.title.trim() });
     // ---------------------- update task of member
     AllMembers?.map((member) => {
       if (
@@ -77,7 +77,7 @@ function CreateTask({ ShowModal }) {
               onChange={(e) =>
                 setNewTask({
                   ...NewTask,
-                  title: e.target.value?.trim().toLowerCase(),
+                  title: e.target.value,
                 })
               }
             />
