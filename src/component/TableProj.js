@@ -1,10 +1,10 @@
 import Table from "react-bootstrap/Table";
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { GrCompliance } from "react-icons/gr";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import { updateOneTodoAPI, deleteOneTodoAPI } from "../API/todoListAPI";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EditTodo from "./EditTodo";
 import { updateOneMemberAPI } from "../API/membersAPI";
@@ -12,16 +12,9 @@ import { createNewHistoryAPI } from "../API/historyAPI";
 import MemberIconComponent from "./MemberIconComponent";
 
 function TableProj() {
-  const [TodoForEdit, setTodoForEdit] = useState({});
-
   const AllTasks = useAllTasks().AllTasks;
   const AllMembers = useAllMembers().AllMembers;
-  // const [showModal, setShowModal] = useState(false);
-  // function handleCloseModal() {
-  //   setShowModal(false);
-  //   navigate("/");
-  // }
-  //   // // handle isCompleted task
+
   const navigate = useNavigate();
   const [TaskIsComplete, setTaskIsComplete] = useState({});
   const [IsComplete, setIsComplete] = useState("");
@@ -39,7 +32,6 @@ function TableProj() {
     navigate(0);
   }
 
-  //  // handle delete task
   async function handleDelete(task) {
     // ------ delete task
     await deleteOneTodoAPI(task._id);
@@ -63,12 +55,6 @@ function TableProj() {
 
   return (
     <Table striped bordered hover variant="dark">
-      {/* <EditTodo
-        ShowModal={showModal}
-        TodoForEdit={TodoForEdit}
-        handleCloseModal={handleCloseModal}
-      /> */}
-
       <thead>
         <tr>
           <th>....</th>
@@ -122,7 +108,6 @@ function TableProj() {
               {AllMembers?.map((member, index) => {
                 return (
                   <td key={index + "selectMember"} className="tdMembers">
-                    {/* {task.manager === member.name ? "X" : ""} */}
                     {task.manager?.map((manage) => {
                       return manage === member.name ? "X" : "";
                     })}
