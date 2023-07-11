@@ -6,14 +6,17 @@ import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
 import { AiOutlineEdit } from "react-icons/ai";
+import useAllTasks from "../hooks/AllTasks/useAllTasks";
 
 function EditTodo({ TodoForEdit }) {
   const AllMembers = useAllMembers().AllMembers;
+  const AllTasks = useAllTasks().AllTasks;
   const [isChecked, setIsChecked] = useState([]);
   const navigate = useNavigate();
   const [UpdateTodo, setUpdateTodo] = useState();
   const [ShowModal, setShowModal] = useState(false);
 
+  console.log(AllTasks);
   // --------------- ترو کردن چک باکس مربوط به منیجرهای یک تسک
   useEffect(() => {
     setIsChecked(
@@ -55,18 +58,32 @@ function EditTodo({ TodoForEdit }) {
   async function handleSubmit(e) {
     e.preventDefault();
     // validatin title
-    if (TodoForEdit.title === "select task" || TodoForEdit.title === "") {
-      alert("this task is exist,select other task");
+    if (UpdateTodo.title.trim() === "") {
+      alert("task title is empty, please inter it");
       return;
     }
     if (UpdateTodo.manager?.length === 0) {
       alert("select manager");
       return;
     }
+    if (
+      AllTasks?.some(
+        (task) =>
+          task.title === UpdateTodo.title.trim() &&
+          task.manager === UpdateTodo.manager
+      )
+    ) {
+      alert("Change title or managers ,Please");
+      return;
+    }
     // close modal
     handleCloseModal();
 
-    await updateOneTodoAPI(TodoForEdit._id, UpdateTodo);
+    // ---------------------- trim title befor saved
+    await updateOneTodoAPI(TodoForEdit._id, {
+      ...UpdateTodo,
+      title: UpdateTodo.title.trim(),
+    });
     // ------------- update task of member api
     AllMembers?.map((member) => {
       if (
@@ -124,10 +141,13 @@ function EditTodo({ TodoForEdit }) {
               <Form.Control
                 type="text"
                 placeholder="enter task title"
-                value={TodoForEdit.title}
-                onChange={(e) =>
-                  setUpdateTodo({ ...UpdateTodo, title: e.target.value })
-                }
+                value={UpdateTodo?.title}
+                onChange={(e) => {
+                  setUpdateTodo({
+                    ...UpdateTodo,
+                    title: e.target.value,
+                  });
+                }}
               />
             </Form.Group>
             {/* ----------------- display name of managers */}
@@ -146,7 +166,7 @@ function EditTodo({ TodoForEdit }) {
                       key={index + "custom-check"}
                       type="switch"
                       label={member.name}
-                      value={member.name.trim().toLowerCase()}
+                      value={member.name}
                       onChange={(e) => {
                         handleIsChecked(index, member);
                       }}
