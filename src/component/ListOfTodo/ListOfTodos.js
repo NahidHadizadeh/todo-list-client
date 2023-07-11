@@ -4,12 +4,13 @@ import "./listOfTodo.css";
 import MemberIconComponent from "../MemberIconComponent";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../../hooks/AllTasks/useAllTasks";
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { GrCompliance } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { createNewHistoryAPI } from "../../API/historyAPI";
 import { updateOneMemberAPI } from "../../API/membersAPI";
 import { deleteOneTodoAPI, updateOneTodoAPI } from "../../API/todoListAPI";
+import EditTodo from "../EditTodo";
 
 export default function ListOfTodos() {
   const AllMembers = useAllMembers().AllMembers;
@@ -29,7 +30,6 @@ export default function ListOfTodos() {
     navigate(0);
   }
 
-  //  // handle delete task
   async function handleDelete(task) {
     // ------ delete task
     await deleteOneTodoAPI(task._id);
@@ -66,15 +66,9 @@ export default function ListOfTodos() {
                     {task.title}
                   </span>
                   <div>
-                    <button
-                      className="btn btn-warning "
-                      onClick={() => {
-                        // setShowModal(true);
-                        // setTodoForEdit(task);
-                      }}
-                    >
-                      <AiOutlineEdit />
-                    </button>
+                    {/* ------------ edit btn component */}
+                    <EditTodo TodoForEdit={task} />
+
                     <button
                       className="btn btn-danger "
                       onClick={() => handleDelete(task)}
@@ -84,8 +78,6 @@ export default function ListOfTodos() {
                     <button
                       className="btn btn-success "
                       onClick={() => {
-                        // setIsComplete("click");
-                        // setTaskIsComplete(task);
                         handleComplete(task);
                       }}
                     >
