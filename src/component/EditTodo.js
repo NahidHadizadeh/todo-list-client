@@ -57,7 +57,6 @@ function EditTodo({ TodoForEdit }) {
   // handel submit form
   async function handleSubmit(e) {
     e.preventDefault();
-    // setUpdateTodo({ ...UpdateTodo, title: UpdateTodo.title.trim() });
     // validatin title
     if (UpdateTodo.title.trim() === "") {
       alert("task title is empty, please inter it");
@@ -70,26 +69,16 @@ function EditTodo({ TodoForEdit }) {
     if (
       AllTasks?.some(
         (task) =>
-          task.title.toLowerCase() === UpdateTodo.title.trim().toLowerCase()
+          task.title === UpdateTodo.title.trim() &&
+          task.manager === UpdateTodo.manager
       )
-      //  &&
-      // UpdateTodo.title.trim().toLowerCase() !==
-      // TodoForEdit?.title?.toLowerCase()
     ) {
-      alert("this task is exist, please change title of task");
+      alert("Change title or managers ,Please");
       return;
     }
     // close modal
     handleCloseModal();
-    // if (UpdateTodo.title === "") {
-    //   alert("please inter task title");
-    // } else {
-    //   if (AllTasks?.some((task) => task.title === UpdateTodo.title)) {
-    //     // alert
-    //     alert("this task is exist, please change title of task");
-    //   } else {
-    //   }
-    // }
+
     // ---------------------- trim title befor saved
     await updateOneTodoAPI(TodoForEdit._id, {
       ...UpdateTodo,
@@ -154,19 +143,10 @@ function EditTodo({ TodoForEdit }) {
                 placeholder="enter task title"
                 value={UpdateTodo?.title}
                 onChange={(e) => {
-                  console.log(e.target.value);
-                  // if (e.target.value === " ") {
-                  //   setUpdateTodo({
-                  //     ...UpdateTodo,
-                  //     title: e.target.value,
-                  //   });
-                  // } else {
                   setUpdateTodo({
                     ...UpdateTodo,
                     title: e.target.value,
                   });
-                  // }
-                  // handleEditTitle(e);
                 }}
               />
             </Form.Group>
