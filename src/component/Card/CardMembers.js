@@ -17,7 +17,9 @@ function CardMembers() {
   useEffect(() => {
     if (searchName !== "") {
       setAllMembersForDisplay([
-        ...allMembers.filter((mem) => mem.name.includes(searchName)),
+        ...allMembers.filter((mem) =>
+          mem.name.toLowerCase().includes(searchName.toLowerCase())
+        ),
       ]);
     } else {
       setAllMembersForDisplay([...allMembers]);
