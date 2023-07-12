@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../../hooks/AddButton/useAddButton";
 import "./addMember.css";
 import UploadFile from "../UploadFile/UploadFile";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createNewMemberAPI } from "../../API/membersAPI";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import AdminChecked from "../AdminCheck/AdminChecked";
@@ -20,7 +20,7 @@ function AddMember({ ShowModal }) {
     email: "",
     skills: [],
     language: [],
-    imageFile: {},
+    imageFile: "",
     tasks: [],
     bgColor: 1,
     admin: false,
@@ -36,7 +36,6 @@ function AddMember({ ShowModal }) {
       });
     }
   }
-  // //handel admin
   function handleAdmin(e) {
     e.target.checked
       ? setNewMember({
@@ -70,7 +69,7 @@ function AddMember({ ShowModal }) {
     // ------------------------------------- end add bg color
   }
 
-  function handleCloseModal() {
+  async function handleCloseModal() {
     data.setShowModal(false);
     navigate("/members");
   }
@@ -86,7 +85,7 @@ function AddMember({ ShowModal }) {
     //// close modal
     handleCloseModal();
     //// create new todo API
-    createNewMemberAPI(NewMember);
+    await createNewMemberAPI(NewMember);
     ///// change url
     navigate(0);
   }
