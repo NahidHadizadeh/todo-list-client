@@ -33,7 +33,15 @@ function Home() {
                         member.bgColor
                       )}
                     >
-                      {member.name.slice(0, 2).toUpperCase()}
+                      {member.imageFile ? (
+                        <img
+                          className="img-member"
+                          alt="admin image"
+                          src={member.imageFile}
+                        />
+                      ) : (
+                        member.name.slice(0, 2).toUpperCase()
+                      )}
                     </div>
                   );
               })}
