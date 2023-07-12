@@ -1,46 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Form } from "react-bootstrap";
 
 export const UploadFile = ({ setNewMember, NewMember }) => {
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState();
+  const [imagePreview, setImagePreview] = useState("");
 
-  // create a preview as a side effect, whenever selected file is changed
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined);
-      return;
-    }
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
+  const convertBase64 = async (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
 
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
 
-  const onSelectFile = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-    setNewMember({ ...NewMember, imageFile: e.target.files[0] });
-    // I've kept this example simple by using the first image instead of multiple
-    setSelectedFile(e.target.files[0]);
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
-  const handleUploadClick = (e) => {
-    e.preventDefault();
-    setNewMember({ ...NewMember, imageFile: { url: preview } });
+
+  const handleProfileImage = async (event) => {
+    const file = event.target.files[0];
+    const base64 = await convertBase64(file);
+    setImagePreview(base64);
+    setNewMember({ ...NewMember, imageFile: base64 });
   };
 
   return (
     <Form.Group className="mb-3" controlId="formBasicImage">
       <Form.Label>image:</Form.Label>
       <div className="skillsBox d-flex">
-        <Form.Control type="file" onChange={onSelectFile} />
-        <button className="btn btn-success" onClick={handleUploadClick}>
-          Upload
-        </button>
-        {selectedFile && <img className="ImageForm" src={preview} />}
+        <Form.Control type="file" onChange={handleProfileImage} />
       </div>
     </Form.Group>
   );
