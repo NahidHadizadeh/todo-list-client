@@ -16,7 +16,6 @@ function EditTodo({ TodoForEdit }) {
   const [UpdateTodo, setUpdateTodo] = useState();
   const [ShowModal, setShowModal] = useState(false);
 
-  console.log(AllTasks);
   // --------------- ترو کردن چک باکس مربوط به منیجرهای یک تسک
   useEffect(() => {
     setIsChecked(
