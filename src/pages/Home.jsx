@@ -58,7 +58,7 @@ function Home() {
           </label>
         </div>
         {/* -------------------------- used "TableProj" component */}
-        <TableProj />
+        {/* <TableProj /> */}
         {/* -------------------------- use"ListOfTodos" component */}
         <ListOfTodos />
       </div>
