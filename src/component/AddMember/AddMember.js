@@ -75,6 +75,7 @@ function AddMember({ ShowModal }) {
   }
   // handel submit form
   async function handleSubmit(e) {
+    console.log(NewMember);
     e.preventDefault();
     // validation skills
     if (countSkills < 2) {
@@ -105,7 +106,7 @@ function AddMember({ ShowModal }) {
               onChange={(e) =>
                 setNewMember({
                   ...NewMember,
-                  name: e.target.value?.trim().toLowerCase(),
+                  name: e.target.value?.trim(),
                 })
               }
             />
