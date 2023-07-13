@@ -20,10 +20,15 @@ export const UploadFile = ({ setNewMember, NewMember }) => {
   };
 
   const handleProfileImage = async (event) => {
+    console.log(event.target.files);
     const file = event.target.files[0];
-    const base64 = await convertBase64(file);
-    setImagePreview(base64);
-    setNewMember({ ...NewMember, imageFile: base64 });
+    if (file.size > 60000) {
+      alert("image is large ,please change it OR file is not save");
+    } else {
+      const base64 = await convertBase64(file);
+      setImagePreview(base64);
+      setNewMember({ ...NewMember, imageFile: base64 });
+    }
   };
 
   return (
