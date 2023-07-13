@@ -39,7 +39,10 @@ function CreateTask({ ShowModal }) {
       alert("select manager");
       return;
     }
-
+    if (NewTask.title) {
+      alert("Task title is empty");
+      return;
+    }
     await createNewTodoAPI({ ...NewTask, title: NewTask.title.trim() });
     // ---------------------- update task of member
     AllMembers?.map((member) => {
