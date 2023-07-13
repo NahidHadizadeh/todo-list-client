@@ -44,7 +44,7 @@ function CardMembers() {
                     <div className="imgCard d-flex align-items-center justify-content-center">
                       {member.imageFile ? (
                         <img
-                          className="imgCard"
+                          className="img-member"
                           src={member.imageFile}
                           alt="personal image"
                         />
