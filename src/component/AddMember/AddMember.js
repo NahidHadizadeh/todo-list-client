@@ -18,14 +18,15 @@ function AddMember({ ShowModal }) {
     age: 0,
     github: "",
     email: "",
-    skills: [],
     language: [],
     imageFile: "",
     tasks: [],
+    skills: [],
     bgColor: 1,
     admin: false,
   });
   const [countSkills, setCountSkills] = useState(0);
+  const [NewSkill, setNewSkill] = useState("");
 
   // handleSelectLanguage
   function handleSelectLanguage(e) {
@@ -47,27 +48,6 @@ function AddMember({ ShowModal }) {
           admin: false,
         });
   }
-  // handel submit skills
-  function handleSubmitSkills(e) {
-    setCountSkills(countSkills + 1);
-    e.preventDefault();
-    const newSkill = document.querySelector(".skillInput").value?.trim();
-    if (newSkill !== "") {
-      setNewMember({
-        ...NewMember,
-        skills: [...NewMember.skills, { newSkill }],
-      });
-    } else {
-      console.log("please inter title of skill");
-    }
-    const showSkillElem = document.querySelector(".showSkill");
-    showSkillElem.innerHTML += ` <span className="titleSkill">${newSkill}  </span>`;
-    document.querySelector(".skillInput").value = "";
-    // ------------------------------------ add number random(1-8) for bg color icon in home page
-
-    setNewMember({ ...NewMember, bgColor: Math.floor(Math.random() * 7) + 1 });
-    // ------------------------------------- end add bg color
-  }
 
   async function handleCloseModal() {
     data.setShowModal(false);
@@ -75,7 +55,6 @@ function AddMember({ ShowModal }) {
   }
   // handel submit form
   async function handleSubmit(e) {
-    console.log(NewMember);
     e.preventDefault();
     // validation skills
     if (countSkills < 2) {
@@ -181,10 +160,32 @@ function AddMember({ ShowModal }) {
                 className="skillInput"
                 type="text"
                 placeholder="Enter skills and submited"
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setNewSkill(e.target.value);
+                  }
+                }}
               />
               <button
                 className="btn btn-success submitSkill"
-                onClick={handleSubmitSkills}
+                onClick={(e) => {
+                  if (NewSkill !== "") {
+                    setCountSkills(countSkills + 1);
+                    setNewMember({
+                      ...NewMember,
+                      skills: [...NewMember.skills, NewSkill],
+                    });
+                    document.querySelector(".skillInput").value = "";
+                    const showSkillElem = document.querySelector(".showSkill");
+
+                    showSkillElem.innerHTML += `
+                    <span className="titleSkill">   -   ${NewSkill} </span>`;
+                    document.querySelector(".skillInput").value = "";
+                  } else {
+                    alert("please inter skill");
+                  }
+                  e.preventDefault();
+                }}
               >
                 submit
               </button>
