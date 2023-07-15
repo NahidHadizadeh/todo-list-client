@@ -24,8 +24,7 @@ function CardMembers() {
     } else {
       setAllMembersForDisplay([...allMembers]);
     }
-  }, [searchName]);
-
+  }, [searchName, allMembers]);
   return (
     <section className="container">
       <Row className="rowOfCards mt-4 ">
