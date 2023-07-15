@@ -23,8 +23,7 @@ function CardHistory() {
             >
               <p>
                 the task<span> {history?.newTodo?.title} </span>has been
-                <span> {history?.title} </span> by the
-                <span> {history?.newTodo?.manager} </span> at
+                <span> {history?.title} </span> at
                 <span> {history?.newTodo?.updatedOn}</span>
               </p>
             </Card>
