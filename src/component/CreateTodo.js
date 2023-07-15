@@ -39,7 +39,7 @@ function CreateTask({ ShowModal }) {
       alert("select manager");
       return;
     }
-    if (NewTask.title) {
+    if (!NewTask.title) {
       alert("Task title is empty");
       return;
     }
