@@ -10,5 +10,8 @@ const createNewHistoryAPI = async (newHistory) => {
   const result = axios.post(`${baseURL}`, newHistory);
   return result;
 };
-
-export { getAllHistoryAPI, createNewHistoryAPI };
+const deleteHistoryAPI = async (id) => {
+  const result = await axios.delete(baseURL);
+  return result;
+};
+export { getAllHistoryAPI, createNewHistoryAPI, deleteHistoryAPI };

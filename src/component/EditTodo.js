@@ -16,9 +16,8 @@ function EditTodo({ TodoForEdit }) {
   const [UpdateTodo, setUpdateTodo] = useState();
   const [ShowModal, setShowModal] = useState(false);
 
-  console.log(AllTasks);
   // --------------- ترو کردن چک باکس مربوط به منیجرهای یک تسک
-  useEffect(() => {
+  const setIsCkeckedFunc = () => {
     setIsChecked(
       AllMembers.map((member) => {
         if (TodoForEdit?.manager?.includes(member.name)) {
@@ -27,7 +26,8 @@ function EditTodo({ TodoForEdit }) {
       })
     );
     setUpdateTodo({ ...TodoForEdit });
-  }, [TodoForEdit]);
+  };
+
   // ------------------------------- پایان
   function handleCloseModal() {
     setShowModal(false);
@@ -117,13 +117,13 @@ function EditTodo({ TodoForEdit }) {
     navigate(0);
     navigate("/");
   }
-
   return (
     <>
       {/* ------------ edit button  */}
       <button
         className="btn btn-warning "
         onClick={() => {
+          setIsCkeckedFunc();
           setShowModal(true);
         }}
       >
@@ -132,7 +132,7 @@ function EditTodo({ TodoForEdit }) {
 
       <Modal show={ShowModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Edit Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -150,13 +150,9 @@ function EditTodo({ TodoForEdit }) {
                 }}
               />
             </Form.Group>
-            {/* ----------------- display name of managers */}
-            {TodoForEdit.manager?.map((manage) => {
-              return <span className="m-1">{manage}</span>;
-            })}
 
             <Form.Group className="check-box">
-              <Form.Label>manager:</Form.Label>
+              <Form.Label className="fw-4">manager: </Form.Label>
 
               {AllMembers?.map((member, index) => {
                 return (

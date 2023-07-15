@@ -7,14 +7,22 @@ function SearchInput() {
 
   function handleSearchMemberr(e) {
     SearchNameData.setSearchName(
-      document.querySelector(".SearchName").value?.trim().toLowerCase()
+      document.querySelector(".SearchName").value?.trim()
     );
     document.querySelector(".SearchName").value = "";
   }
+  const handleShearch = (e) => {
+    SearchNameData.setSearchName(e.target.value.trim());
+  };
 
   return (
     <>
-      <InputGroup className={" mb-3 px-3 bg-dark-blue"}>
+      <InputGroup
+        className={" mb-3 px-3 bg-dark-blue"}
+        onChange={(e) => {
+          handleShearch(e);
+        }}
+      >
         <BsSearch
           className="m-auto search-icon"
           onClick={(e) => {

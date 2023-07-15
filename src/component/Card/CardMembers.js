@@ -10,38 +10,26 @@ function CardMembers() {
   const searchName = useSearchMember().SearchName;
   const AllTasks = useAllTasks().AllTasks;
   const allMembers = useAllMembers().AllMembers;
-  const [AllMembers, setAllMembers] = useState([]);
+  const [AllMembersForDisplay, setAllMembersForDisplay] = useState([
+    ...allMembers,
+  ]);
 
   useEffect(() => {
     if (searchName !== "") {
-      allMembers?.map((memberr) => {
-        if (memberr.name === searchName) {
-          setAllMembers([memberr]);
-        }
-      });
+      setAllMembersForDisplay([
+        ...allMembers.filter((mem) =>
+          mem.name.toLowerCase().includes(searchName.toLowerCase())
+        ),
+      ]);
     } else {
-      setAllMembers([...allMembers]);
+      setAllMembersForDisplay([...allMembers]);
     }
   }, [searchName, allMembers]);
-
-  // set className green or red for tasks of members
-  const [classNameTasks, setClassNameTasks] = useState("");
-
-  function GetClassNameTasks(titleOfTask) {
-    AllTasks.filter((task) => task.title === titleOfTask).map((taskFilter) => {
-      if (taskFilter.complete) {
-        setClassNameTasks("green");
-      } else {
-        setClassNameTasks("red");
-      }
-    });
-  }
-
   return (
     <section className="container">
       <Row className="rowOfCards mt-4 ">
-        {AllMembers.length > 0 ? (
-          AllMembers?.map((member, index) => {
+        {AllMembersForDisplay.length > 0 ? (
+          AllMembersForDisplay?.map((member, index) => {
             return (
               <Col
                 key={member.name + "colMember"}
@@ -52,13 +40,16 @@ function CardMembers() {
               >
                 <div className="BoxMember">
                   <Row xs="12" md="6" className=" pe-md-5 imgBox">
-                    {/* <img
-                      className="imgCard"
-                      src="./user.png"
-                      alt="personal image"
-                    /> */}
                     <div className="imgCard d-flex align-items-center justify-content-center">
-                      <FaUserCircle />
+                      {member.imageFile ? (
+                        <img
+                          className="img-member"
+                          src={member.imageFile}
+                          alt="personal image"
+                        />
+                      ) : (
+                        <FaUserCircle />
+                      )}
                     </div>
                   </Row>
                   <Row className="details ">

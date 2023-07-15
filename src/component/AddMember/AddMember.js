@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../../hooks/AddButton/useAddButton";
 import "./addMember.css";
 import UploadFile from "../UploadFile/UploadFile";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createNewMemberAPI } from "../../API/membersAPI";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import AdminChecked from "../AdminCheck/AdminChecked";
@@ -18,14 +18,15 @@ function AddMember({ ShowModal }) {
     age: 0,
     github: "",
     email: "",
-    skills: [],
     language: [],
-    imageFile: {},
+    imageFile: "",
     tasks: [],
+    skills: [],
     bgColor: 1,
     admin: false,
   });
   const [countSkills, setCountSkills] = useState(0);
+  const [NewSkill, setNewSkill] = useState("");
 
   // handleSelectLanguage
   function handleSelectLanguage(e) {
@@ -36,7 +37,6 @@ function AddMember({ ShowModal }) {
       });
     }
   }
-  // //handel admin
   function handleAdmin(e) {
     e.target.checked
       ? setNewMember({
@@ -48,29 +48,8 @@ function AddMember({ ShowModal }) {
           admin: false,
         });
   }
-  // handel submit skills
-  function handleSubmitSkills(e) {
-    setCountSkills(countSkills + 1);
-    e.preventDefault();
-    const newSkill = document.querySelector(".skillInput").value?.trim();
-    if (newSkill !== "") {
-      setNewMember({
-        ...NewMember,
-        skills: [...NewMember.skills, { newSkill }],
-      });
-    } else {
-      console.log("please inter title of skill");
-    }
-    const showSkillElem = document.querySelector(".showSkill");
-    showSkillElem.innerHTML += ` <span className="titleSkill">${newSkill}  </span>`;
-    document.querySelector(".skillInput").value = "";
-    // ------------------------------------ add number random(1-8) for bg color icon in home page
 
-    setNewMember({ ...NewMember, bgColor: Math.floor(Math.random() * 7) + 1 });
-    // ------------------------------------- end add bg color
-  }
-
-  function handleCloseModal() {
+  async function handleCloseModal() {
     data.setShowModal(false);
     navigate("/members");
   }
@@ -86,7 +65,7 @@ function AddMember({ ShowModal }) {
     //// close modal
     handleCloseModal();
     //// create new todo API
-    createNewMemberAPI(NewMember);
+    await createNewMemberAPI(NewMember);
     ///// change url
     navigate(0);
   }
@@ -106,7 +85,7 @@ function AddMember({ ShowModal }) {
               onChange={(e) =>
                 setNewMember({
                   ...NewMember,
-                  name: e.target.value?.trim().toLowerCase(),
+                  name: e.target.value?.trim(),
                 })
               }
             />
@@ -181,10 +160,32 @@ function AddMember({ ShowModal }) {
                 className="skillInput"
                 type="text"
                 placeholder="Enter skills and submited"
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setNewSkill(e.target.value);
+                  }
+                }}
               />
               <button
                 className="btn btn-success submitSkill"
-                onClick={handleSubmitSkills}
+                onClick={(e) => {
+                  if (NewSkill !== "") {
+                    setCountSkills(countSkills + 1);
+                    setNewMember({
+                      ...NewMember,
+                      skills: [...NewMember.skills, NewSkill],
+                    });
+                    document.querySelector(".skillInput").value = "";
+                    const showSkillElem = document.querySelector(".showSkill");
+
+                    showSkillElem.innerHTML += `
+                    <span className="titleSkill">   -   ${NewSkill} </span>`;
+                    document.querySelector(".skillInput").value = "";
+                  } else {
+                    alert("please inter skill");
+                  }
+                  e.preventDefault();
+                }}
               >
                 submit
               </button>

@@ -27,7 +27,8 @@ export default function ListOfTodos() {
       title: task?.complete ? "Don't Complete" : "Completed",
       newTodo: { ...task },
     });
-    navigate(0);
+    // navigate(0);
+    window.location.reload();
   }
 
   async function handleDelete(task) {
@@ -48,7 +49,8 @@ export default function ListOfTodos() {
       title: "Deleted",
       newTodo: { ...task },
     });
-    navigate(0);
+    // navigate(0);
+    window.location.reload();
   }
 
   return (

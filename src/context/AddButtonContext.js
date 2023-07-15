@@ -6,6 +6,8 @@ export const AddBtnContext = createContext({
 });
 
 function AddButtonProvider({ children }) {
+  console.log("add btn rovider");
+
   const [ShowModal, setShowModal] = useState(false);
 
   return (

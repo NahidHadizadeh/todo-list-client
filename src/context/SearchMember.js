@@ -1,12 +1,9 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 export const SearchMemberContext = createContext({
   SearchName: [],
   setSearchName: () => {},
 });
-export const TasksOfMemberContext = createContext({
-  MembersTasks: [],
-  setMembersTask: () => {},
-});
+
 function SearchNameProvider({ children }) {
   const [SearchName, setSearchName] = useState("");
 
