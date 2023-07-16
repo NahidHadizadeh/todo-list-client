@@ -183,17 +183,17 @@ table {
   height: 100%;
   border-radius: 50%;
 }
-
+.spinnerClass3 {
+  width: 0.5rem !important;
+  height: 0.5rem !important;
+}
 .spinnerClass2 {
   width: 0.6rem !important;
   height: 0.6em !important;
   margin-left: 0.2rem;
   margin-right: 0.2rem;
 }
-.spinnerClass1 {
-  width: 0.7rem !important;
-  height: 0.7rem !important;
-}
+
 @media (max-width: 768px) {
   .taskBox {
     display: block;
