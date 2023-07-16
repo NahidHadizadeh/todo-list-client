@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Col, Spinner } from "react-bootstrap";
 import "./listOfTodo.css";
 import MemberIconComponent from "../MemberIconComponent";
@@ -42,11 +41,13 @@ export default function ListOfTodos() {
       setAllTasks(dataSent.data);
     }
     // ------ edit task's member after delete task
-    AllMembers?.map((member) => {
-      if (task.manager?.includes(member.name)) {
+    AllMembers?.filter((mem) => task.manager?.includes(mem.name))?.map(
+      (member) => {
+        // if (task.manager?.includes(member.name)) {
         updateTasksOfMember(member, task);
+        // }
       }
-    });
+    );
     //create history for delete tasks
     await createNewHistoryAPI({
       title: "Deleted",
@@ -60,7 +61,6 @@ export default function ListOfTodos() {
       ...member,
       tasks: member.tasks.filter((tas) => tas !== task.title),
     });
-    console.log(dataSent.data);
     if (dataSent) {
       setAllMembers(dataSent.data);
     }

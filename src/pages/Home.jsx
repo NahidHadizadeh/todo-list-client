@@ -24,8 +24,8 @@ function Home() {
           <div>
             <div className="listOfMembers">
               {AllMembers ? (
-                AllMembers?.map((member, index) => {
-                  if (member.admin)
+                AllMembers?.filter((member) => member.admin)?.map(
+                  (member, index) => {
                     return (
                       <div
                         key={"admin" + index}
@@ -36,7 +36,7 @@ function Home() {
                         {member.imageFile ? (
                           <img
                             className="img-member"
-                            alt="admin image"
+                            alt="admin "
                             src={member.imageFile}
                           />
                         ) : (
@@ -44,7 +44,8 @@ function Home() {
                         )}
                       </div>
                     );
-                })
+                  }
+                )
               ) : (
                 <Spinner animation="border" variant="secondary" />
               )}
