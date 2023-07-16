@@ -1,14 +1,13 @@
 import NavbarProject from "../component/Navbar";
-import TableProj from "../component/TableProj";
+// import TableProj from "../component/TableProj";
 import AddButton from "../component/AddButton";
 import CreateTask from "../component/CreateTodo";
 import useAddButton from "../hooks/AddButton/useAddButton";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
-// import { FaUserCircle } from "react-icons/fa";
 import MembersIcon from "../component/MembersIcon";
-// import ListOfTodos from "../component/ListOfTodo/ListOfTodos";
 import ListOfTodos from "../component/ListOfTodo/ListOfTodos";
+import Spinner from "react-bootstrap/Spinner";
 
 function Home() {
   const dataBtn = useAddButton();
@@ -24,27 +23,31 @@ function Home() {
           <span>Members: </span>
           <div>
             <div className="listOfMembers">
-              {AllMembers?.map((member, index) => {
-                if (member.admin)
-                  return (
-                    <div
-                      key={"admin" + index}
-                      className={"displayImage adminImage bgColor".concat(
-                        member.bgColor
-                      )}
-                    >
-                      {member.imageFile ? (
-                        <img
-                          className="img-member"
-                          alt="admin image"
-                          src={member.imageFile}
-                        />
-                      ) : (
-                        member.name.slice(0, 2).toUpperCase()
-                      )}
-                    </div>
-                  );
-              })}
+              {AllMembers ? (
+                AllMembers?.map((member, index) => {
+                  if (member.admin)
+                    return (
+                      <div
+                        key={"admin" + index}
+                        className={"displayImage adminImage bgColor".concat(
+                          member.bgColor
+                        )}
+                      >
+                        {member.imageFile ? (
+                          <img
+                            className="img-member"
+                            alt="admin image"
+                            src={member.imageFile}
+                          />
+                        ) : (
+                          member.name.slice(0, 2).toUpperCase()
+                        )}
+                      </div>
+                    );
+                })
+              ) : (
+                <Spinner animation="border" variant="secondary" />
+              )}
             </div>
           </div>
           {/* ------------------------------------------ showe list of member */}

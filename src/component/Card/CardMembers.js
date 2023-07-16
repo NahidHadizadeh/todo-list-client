@@ -1,4 +1,4 @@
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 import "./cardMembers.css";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../../hooks/AllTasks/useAllTasks";
@@ -141,7 +141,7 @@ function CardMembers() {
             );
           })
         ) : (
-          <h6>notting found...</h6>
+          <Spinner animation="border" variant="secondary" />
         )}
       </Row>
     </section>
