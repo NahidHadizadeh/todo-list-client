@@ -24,7 +24,7 @@ function Home() {
           <span>Members: </span>
           <div>
             <div className="listOfMembers">
-              {AllMembers.map((member, index) => {
+              {AllMembers?.map((member, index) => {
                 if (member.admin)
                   return (
                     <div

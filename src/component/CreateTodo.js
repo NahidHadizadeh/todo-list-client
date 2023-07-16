@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../hooks/AddButton/useAddButton";
 import "../component/AddMember/addMember.css";
@@ -11,10 +10,11 @@ import { createNewHistoryAPI } from "../API/historyAPI";
 
 function CreateTask({ ShowModal }) {
   const AllMembers = useAllMembers().AllMembers;
+  const setAllMembers = useAllMembers().setAllMembers;
   const AllTasks = useAllTasks().AllTasks;
+  const setAllTasks = useAllTasks().setAllTasks;
   const dataBtn = useAddButton();
 
-  const navigate = useNavigate();
   const [NewTask, setNewTask] = useState({
     title: "",
     manager: [],
@@ -25,7 +25,6 @@ function CreateTask({ ShowModal }) {
 
   function handleCloseModal() {
     dataBtn.setShowModal(false);
-    navigate("/");
   }
 
   async function handleSubmit(e) {
@@ -43,17 +42,21 @@ function CreateTask({ ShowModal }) {
       alert("Task title is empty");
       return;
     }
-    await createNewTodoAPI({ ...NewTask, title: NewTask.title.trim() });
+    const dataSent = await createNewTodoAPI({
+      ...NewTask,
+      title: NewTask.title.trim(),
+    });
+    // ---------- rerender page without refresh
+    if (dataSent) {
+      setAllTasks(dataSent.data);
+    }
     // ---------------------- update task of member
     AllMembers?.map((member) => {
       if (
         NewTask?.manager?.includes(member.name) &&
         !member.tasks?.includes(NewTask.title)
       ) {
-        updateOneMemberAPI(member._id, {
-          ...member,
-          tasks: [...member.tasks, NewTask.title],
-        });
+        updateTasksOfMember(member);
       }
     });
     // --------------------------------- end update
@@ -61,11 +64,21 @@ function CreateTask({ ShowModal }) {
       title: "Created",
       newTodo: { ...NewTask },
     });
-    // refresh page for display all todos
-    navigate("/");
-    navigate(0);
-  }
 
+    handleCloseModal();
+  }
+  // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
+  // و ست کردن ممبر ها برای نمایش درست در پیج ممبرز
+  async function updateTasksOfMember(member) {
+    const dataSent = await updateOneMemberAPI(member._id, {
+      ...member,
+      tasks: [...member.tasks, NewTask.title],
+    });
+    console.log(dataSent.data);
+    if (dataSent) {
+      setAllMembers(dataSent.data);
+    }
+  }
   return (
     <Modal show={ShowModal} onHide={handleCloseModal}>
       <Modal.Header closeButton>
@@ -98,16 +111,12 @@ function CreateTask({ ShowModal }) {
                     if (e.target.checked) {
                       setNewTask({
                         ...NewTask,
-                        manager: [
-                          ...NewTask.manager,
-                          e.target.value?.trim().toLowerCase(),
-                        ],
+                        manager: [...NewTask.manager, e.target.value],
                       });
                     } else {
                       //--------------- delete manager that checked is false
                       const newTaskManagerArr = NewTask.manager?.filter(
-                        (manage) =>
-                          !(manage === e.target.value?.trim().toLowerCase())
+                        (manage) => !(manage === e.target.value)
                       );
                       setNewTask({
                         ...NewTask,

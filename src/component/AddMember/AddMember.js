@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Button, Form, Modal } from "react-bootstrap";
 import useAddButton from "../../hooks/AddButton/useAddButton";
 import "./addMember.css";
@@ -10,9 +9,8 @@ import AdminChecked from "../AdminCheck/AdminChecked";
 
 function AddMember({ ShowModal }) {
   const data = useAddButton();
-  const AllMembers = useAllMembers().AllMembers;
+  const setAllMembers = useAllMembers().setAllMembers;
 
-  const navigate = useNavigate();
   const [NewMember, setNewMember] = useState({
     name: "",
     age: 0,
@@ -51,7 +49,6 @@ function AddMember({ ShowModal }) {
 
   async function handleCloseModal() {
     data.setShowModal(false);
-    navigate("/members");
   }
   // handel submit form
   async function handleSubmit(e) {
@@ -62,12 +59,14 @@ function AddMember({ ShowModal }) {
       console.log("enter more skills Please");
       return;
     }
-    //// close modal
+
     handleCloseModal();
-    //// create new todo API
-    await createNewMemberAPI(NewMember);
-    ///// change url
-    navigate(0);
+
+    const dataSent = await createNewMemberAPI(NewMember);
+    if (dataSent) {
+      setAllMembers(dataSent.data);
+    }
+    handleCloseModal();
   }
 
   return (

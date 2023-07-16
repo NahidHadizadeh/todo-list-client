@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { updateOneTodoAPI } from "../API/todoListAPI";
@@ -8,11 +7,13 @@ import { createNewHistoryAPI } from "../API/historyAPI";
 import { AiOutlineEdit } from "react-icons/ai";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
 
+// ------گرفتن آلتسک و ست آل تسک از پرنت برای ری رندر شدن است تا نیاز به رقرش صفحه نداشته باشیم
 function EditTodo({ TodoForEdit }) {
   const AllMembers = useAllMembers().AllMembers;
+  const setAllMembers = useAllMembers().setAllMembers;
   const AllTasks = useAllTasks().AllTasks;
+  const setAllTasks = useAllTasks().setAllTasks;
   const [isChecked, setIsChecked] = useState([]);
-  const navigate = useNavigate();
   const [UpdateTodo, setUpdateTodo] = useState();
   const [ShowModal, setShowModal] = useState(false);
 
@@ -31,7 +32,6 @@ function EditTodo({ TodoForEdit }) {
   // ------------------------------- پایان
   function handleCloseModal() {
     setShowModal(false);
-    navigate("/");
   }
 
   function handleIsChecked(index, member) {
@@ -80,29 +80,18 @@ function EditTodo({ TodoForEdit }) {
     handleCloseModal();
 
     // ---------------------- trim title befor saved
-    await updateOneTodoAPI(TodoForEdit._id, {
+    const dataSent = await updateOneTodoAPI(TodoForEdit._id, {
       ...UpdateTodo,
       title: UpdateTodo.title.trim(),
     });
+    // ------ for rerender page without refresh it
+    if (dataSent.data) {
+      setAllTasks(dataSent.data);
+    }
     // ------------- update task of member api
+
     AllMembers?.map((member) => {
-      if (
-        UpdateTodo.manager?.includes(member.name) &&
-        !member.tasks?.includes(UpdateTodo.title)
-      ) {
-        updateOneMemberAPI(member._id, {
-          ...member,
-          tasks: [...member.tasks, UpdateTodo.title],
-        });
-      } else if (
-        !UpdateTodo.manager?.includes(member.name) &&
-        member.tasks?.includes(UpdateTodo.title)
-      ) {
-        updateOneMemberAPI(member._id, {
-          ...member,
-          tasks: [...member.tasks?.filter((task) => task !== UpdateTodo.title)],
-        });
-      }
+      updateTasksOfMember(member);
     });
     // ------------- end update task of member api
 
@@ -112,10 +101,34 @@ function EditTodo({ TodoForEdit }) {
       newTodo: { ...UpdateTodo },
       todoForEdit: { ...TodoForEdit },
     });
+  }
 
-    // change url
-    navigate(0);
-    navigate("/");
+  // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
+  // و ست کردن ممبر ها برای نمایش درست در پیج ممبرز
+  async function updateTasksOfMember(member) {
+    if (
+      UpdateTodo.manager?.includes(member.name) &&
+      !member.tasks?.includes(UpdateTodo.title)
+    ) {
+      const dataSentForTitle = await updateOneMemberAPI(member._id, {
+        ...member,
+        tasks: [...member.tasks, UpdateTodo.title],
+      });
+      if (dataSentForTitle) {
+        setAllMembers(dataSentForTitle.data);
+      }
+    } else if (
+      !UpdateTodo.manager?.includes(member.name) &&
+      member.tasks?.includes(UpdateTodo.title)
+    ) {
+      const dataSentForManagers = await updateOneMemberAPI(member._id, {
+        ...member,
+        tasks: [...member.tasks?.filter((task) => task !== UpdateTodo.title)],
+      });
+      if (dataSentForManagers) {
+        setAllMembers(dataSentForManagers.data);
+      }
+    }
   }
   return (
     <>
