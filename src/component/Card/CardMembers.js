@@ -45,7 +45,7 @@ function CardMembers() {
                         <img
                           className="img-member"
                           src={member.imageFile}
-                          alt="personal image"
+                          alt="personal"
                         />
                       ) : (
                         <FaUserCircle />
