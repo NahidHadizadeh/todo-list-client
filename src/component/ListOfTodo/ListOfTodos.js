@@ -71,7 +71,7 @@ export default function ListOfTodos() {
       <div className="main-row">
         {/* sm={12} md={6} lg={4} xl={4} */}
         <Col className="columns-todo col-12">
-          {AllTasks ? (
+          {AllTasks.length > 0 ? (
             AllTasks?.map((task, index) => {
               return (
                 <div key={index + "tasks"} className="todo-box">
