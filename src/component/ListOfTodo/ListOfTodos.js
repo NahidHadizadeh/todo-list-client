@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col } from "react-bootstrap";
+import { Col, Spinner } from "react-bootstrap";
 import "./listOfTodo.css";
 import MemberIconComponent from "../MemberIconComponent";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
@@ -71,51 +71,53 @@ export default function ListOfTodos() {
       <div className="main-row">
         {/* sm={12} md={6} lg={4} xl={4} */}
         <Col className="columns-todo col-12">
-          {AllTasks
-            ? AllTasks?.map((task, index) => {
-                return (
-                  <div key={index + "tasks"} className="todo-box">
-                    <div className="line1-todo">
-                      <span
-                        className={
-                          task.complete ? "taskBox greenText" : "taskBox"
-                        }
-                      >
-                        {task.title}
-                      </span>
-                      <div>
-                        {/* ------------ edit btn component */}
-                        <EditTodo TodoForEdit={task} />
+          {AllTasks ? (
+            AllTasks?.map((task, index) => {
+              return (
+                <div key={index + "tasks"} className="todo-box">
+                  <div className="line1-todo">
+                    <span
+                      className={
+                        task.complete ? "taskBox greenText" : "taskBox"
+                      }
+                    >
+                      {task.title}
+                    </span>
+                    <div>
+                      {/* ------------ edit btn component */}
+                      <EditTodo TodoForEdit={task} />
 
-                        <button
-                          className="btn btn-danger "
-                          onClick={() => handleDelete(task)}
-                        >
-                          <AiOutlineDelete />
-                        </button>
-                        <button
-                          className="btn btn-success "
-                          onClick={() => {
-                            handleComplete(task);
-                          }}
-                        >
-                          <GrCompliance />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="managers-todo">
-                      <div className="d-flex text-light">
-                        {AllMembers?.map((member) => {
-                          if (task.manager?.includes(member.name)) {
-                            return <MemberIconComponent member={member} />;
-                          }
-                        })}
-                      </div>
+                      <button
+                        className="btn btn-danger "
+                        onClick={() => handleDelete(task)}
+                      >
+                        <AiOutlineDelete />
+                      </button>
+                      <button
+                        className="btn btn-success "
+                        onClick={() => {
+                          handleComplete(task);
+                        }}
+                      >
+                        <GrCompliance />
+                      </button>
                     </div>
                   </div>
-                );
-              })
-            : "notting"}
+                  <div className="managers-todo">
+                    <div className="d-flex text-light">
+                      {AllMembers?.map((member) => {
+                        if (task.manager?.includes(member.name)) {
+                          return <MemberIconComponent member={member} />;
+                        }
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <Spinner animation="border" variant="secondary" />
+          )}
         </Col>
         {/* <Col sm={12} md={6} lg={4} xl={3} className="columns-todo">
           2
