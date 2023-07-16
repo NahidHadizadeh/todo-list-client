@@ -23,7 +23,7 @@ function Home() {
           <span>Members: </span>
           <div>
             <div className="listOfMembers">
-              {AllMembers ? (
+              {AllMembers.length > 0 ? (
                 AllMembers?.filter((member) => member.admin)?.map(
                   (member, index) => {
                     return (
@@ -47,7 +47,11 @@ function Home() {
                   }
                 )
               ) : (
-                <Spinner animation="border" variant="secondary" />
+                <Spinner
+                  className="spinnerClass2"
+                  animation="grow"
+                  variant="secondary"
+                />
               )}
             </div>
           </div>
