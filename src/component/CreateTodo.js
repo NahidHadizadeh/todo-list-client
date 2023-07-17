@@ -64,7 +64,13 @@ function CreateTask({ ShowModal }) {
       title: "Created",
       newTodo: { ...NewTask },
     });
-
+    setNewTask({
+      title: "",
+      manager: [],
+      complete: false,
+      updatedOn: new Date(),
+      createdOn: new Date(),
+    });
     handleCloseModal();
   }
   // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
