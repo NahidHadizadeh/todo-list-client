@@ -1,4 +1,4 @@
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Row, Spinner } from "react-bootstrap";
 import "./cardMembers.css";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../../hooks/AllTasks/useAllTasks";
@@ -53,113 +53,27 @@ function CardMembers() {
                       </div>
                     </div>
                     <div className="col-4 star-box">
-                      <FaStar />
+                      <span
+                        className={
+                          // ------- if member has task =>red star or  green star ,else withe star
+                          member.tasks.length > 0
+                            ? AllTasks.filter((task) =>
+                                member.tasks?.includes(task.title)
+                              )?.every((tas) => tas.complete)
+                              ? "green-star"
+                              : "red-star"
+                            : ""
+                        }
+                      >
+                        <FaStar />
+                      </span>
                     </div>
                   </div>
-                  {/* <Row className="details ">
-                    <Col xs="12" sm="6" className="details-col">
-                      <p className="item-sub">
-                        Name: <span>{member.name}</span>
-                      </p>
-
-                      <p className="item-sub">
-                        Github: <span>{member.github}</span>
-                      </p>
-                      <p className="item-sub">
-                        Admin:
-                        <span>{member.admin ? "admin" : "costomer"}</span>
-                      </p>
-                    </Col>
-                    <Col xs="12" sm="6" className="details-col">
-                      <p className="item-sub">
-                        Age: <span>{member.age}</span>
-                      </p>
-
-                      <p className="item-sub">
-                        LinkedIn: <span>{member.email}</span>
-                      </p>
-                    </Col>
-                    <Row>
-                      <p className="item-sub">
-                        Languages:
-                        {member?.language?.map((lang, indexLang) => {
-                          return (
-                            <span
-                              key={index + "lang" + indexLang + member.name}
-                              className="spanItem me-2 mb-2 bg-dark-blue"
-                            >
-                              {lang}
-                            </span>
-                          );
-                        })}
-                      </p>
-                      <div>
-                        <span className="item-sub "> Skils: </span>
-                        <div className="BoxSkills">
-                          {member?.skills?.map((skill, index) => {
-                            return (
-                              <span
-                                key={skill + member.name}
-                                className={" spanItem me-2 mb-2 bg-dark-blue"}
-                              >
-                                {skill}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <div>
-                        <span className="item-sub "> Tasks: </span>
-                        <div className="BoxSkills">
-                          {member?.tasks?.map((titleOfTask) => {
-                            return AllTasks.filter(
-                              (task) => task.title === titleOfTask
-                            ).map((taskFilter) => {
-                              if (taskFilter.complete) {
-                                return (
-                                  <span
-                                    key={titleOfTask}
-                                    className={"green spanItem me-2 mb-2 "}
-                                  >
-                                    {titleOfTask}
-                                  </span>
-                                );
-                              } else {
-                                return (
-                                  <span
-                                    key={titleOfTask}
-                                    className={"red spanItem me-2 mb-2 "}
-                                  >
-                                    {titleOfTask}
-                                  </span>
-                                );
-                              }
-                            });
-                          })}
-                        </div>
-                      </div>
-                    </Row>
-                  </Row> */}
                   <div className="details">
                     <div className="name-box">
                       <p className="item-sub">
                         <span>{member.name}</span>
-                        {/* <span
-                          className={
-                            // ------- if member has task =>red star or  green star ,else withe star
-                            member.tasks.length > 0
-                              ? member?.tasks?.every((task) => task.complete)
-                                ? "green-star"
-                                : "red-star"
-                              : ""
-                          }
-                        >
-                          <FaStar />
-                        </span> */}
                       </p>
-                      {/* <div>
-                        
-                      </div> */}
                     </div>
                     <div className="admin-box ">
                       <p className="item-sub">
