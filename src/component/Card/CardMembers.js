@@ -25,7 +25,6 @@ function CardMembers() {
       setAllMembersForDisplay([...allMembers]);
     }
   }, [searchName, allMembers]);
-  console.log(AllMembersForDisplay);
   return (
     <section className="container">
       <Row className="rowOfCards mt-4 ">
