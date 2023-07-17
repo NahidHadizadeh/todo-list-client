@@ -20,7 +20,7 @@ function AddMember({ ShowModal }) {
     imageFile: "",
     tasks: [],
     skills: [],
-    bgColor: 1,
+    bgColor: Math.floor(Math.random() * 7) + 1,
     admin: false,
   });
   const [countSkills, setCountSkills] = useState(0);
@@ -53,19 +53,65 @@ function AddMember({ ShowModal }) {
   // handel submit form
   async function handleSubmit(e) {
     e.preventDefault();
-    // validation skills
+    //---------  validation skills
+    if (NewMember.name.length > 30 || NewMember.name.length < 3) {
+      alert("name is not valide (max 50 char , min 3 char)");
+      console.log("name is not valide (max 50 char , min 3 char)");
+      return;
+    }
+    if (NewMember.age > 60 || NewMember.age < 15 || !NewMember.age) {
+      alert("age is not valide ( 15<age<60 )");
+      console.log("age is not valide ( 15<age<60 )");
+      return;
+    }
+
+    if (
+      !NewMember.github.includes("https://github.com/") ||
+      !NewMember.github ||
+      NewMember.github?.length > 50
+    ) {
+      alert("github is not valide and max 50 char");
+      console.log("github is not valide and max 50 char");
+      return;
+    }
+
+    if (
+      (!NewMember.email.includes("@") && !NewMember.email.includes(".")) ||
+      !NewMember.email
+    ) {
+      alert("email is not valide");
+      console.log("email is not valide");
+      return;
+    }
+    if (NewMember.language?.length === 0) {
+      alert("select language");
+      console.log("select language");
+      return;
+    }
     if (countSkills < 2) {
       alert("enter more skills Please");
       console.log("enter more skills Please");
       return;
     }
-
+    // -------- end validate
     handleCloseModal();
 
     const dataSent = await createNewMemberAPI(NewMember);
     if (dataSent) {
       setAllMembers(dataSent.data);
     }
+    setNewMember({
+      name: "",
+      age: 0,
+      github: "",
+      email: "",
+      language: [],
+      imageFile: "",
+      tasks: [],
+      skills: [],
+      bgColor: Math.floor(Math.random() * 7) + 1,
+      admin: false,
+    });
     handleCloseModal();
   }
 
@@ -168,7 +214,10 @@ function AddMember({ ShowModal }) {
               <button
                 className="btn btn-success submitSkill"
                 onClick={(e) => {
-                  if (NewSkill !== "") {
+                  if (
+                    NewSkill !== "" &&
+                    !NewMember.skills?.includes(NewSkill)
+                  ) {
                     setCountSkills(countSkills + 1);
                     setNewMember({
                       ...NewMember,
@@ -181,7 +230,7 @@ function AddMember({ ShowModal }) {
                     <span className="titleSkill">   -   ${NewSkill} </span>`;
                     document.querySelector(".skillInput").value = "";
                   } else {
-                    alert("please inter skill");
+                    alert("please inter new skill");
                   }
                   e.preventDefault();
                 }}
