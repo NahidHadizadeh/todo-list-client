@@ -8,17 +8,31 @@
   background-color: var(--White);
   margin-left: 1rem;
 }
-
+.name-box {
+  text-align: center;
+  margin-top: 0.3rem;
+  font-size: medium;
+}
+.admin-box {
+  display: flex;
+  justify-content: space-between;
+}
 .title {
   font-size: 1.5rem;
   font-weight: 800;
 }
 .item-sub {
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 .item-sub span {
-  font-weight: 300;
+  padding-left: 0.3rem;
+  font-weight: 500;
 }
+.roll-span {
+  font-weight: 600 !important;
+}
+
 .details-col {
   line-height: 1;
   padding-top: 1rem;
@@ -65,7 +79,7 @@
   /* font-size: 0.8rem; */
 }
 .BoxSkills {
-  overflow-x: scroll;
+  overflow-x: auto;
   padding: 0.5rem;
 }
 .red {
@@ -73,4 +87,13 @@
 }
 .green {
   background-color: green;
+}
+.red-star {
+  color: red;
+}
+.green-star {
+  color: green;
+}
+.border-bottom {
+  border-bottom: 1px solid gray;
 }
