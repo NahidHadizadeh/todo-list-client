@@ -60,16 +60,21 @@
 .imgBox {
   justify-content: center;
   align-items: center;
+  /* margin-left: 37%; */
+}
+.img-box {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
 }
 .imgCard {
   width: 4rem;
   height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   border: 1px solid black;
   padding: 0;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
 }
 .BoxMember {
   box-shadow: 1px 1px 10px rgb(121, 121, 121);
@@ -96,4 +101,9 @@
 }
 .border-bottom {
   border-bottom: 1px solid gray;
+}
+.star-box {
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }

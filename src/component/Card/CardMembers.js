@@ -37,19 +37,25 @@ function CardMembers() {
                 key={member.name + "colMember"}
               >
                 <div className="BoxMember">
-                  <Row xs="12" md="6" className=" imgBox">
-                    <div className="imgCard d-flex align-items-center justify-content-center">
-                      {member.imageFile ? (
-                        <img
-                          className="img-member"
-                          src={member.imageFile}
-                          alt="personal"
-                        />
-                      ) : (
-                        <FaUserCircle />
-                      )}
+                  <div className="row img-box">
+                    <div className="col-4"></div>
+                    <div className="col-4 d-flex justify-content-center ">
+                      <div className="imgCard ">
+                        {member.imageFile ? (
+                          <img
+                            className="img-member"
+                            src={member.imageFile}
+                            alt="personal"
+                          />
+                        ) : (
+                          <FaUserCircle />
+                        )}
+                      </div>
                     </div>
-                  </Row>
+                    <div className="col-4 star-box">
+                      <FaStar />
+                    </div>
+                  </div>
                   {/* <Row className="details ">
                     <Col xs="12" sm="6" className="details-col">
                       <p className="item-sub">
@@ -138,7 +144,7 @@ function CardMembers() {
                     <div className="name-box">
                       <p className="item-sub">
                         <span>{member.name}</span>
-                        <span
+                        {/* <span
                           className={
                             // ------- if member has task =>red star or  green star ,else withe star
                             member.tasks.length > 0
@@ -149,7 +155,7 @@ function CardMembers() {
                           }
                         >
                           <FaStar />
-                        </span>
+                        </span> */}
                       </p>
                       {/* <div>
                         
