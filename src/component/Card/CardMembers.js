@@ -56,7 +56,7 @@ function CardMembers() {
                         className={
                           // ------- if member has task =>red star or  green star ,else withe star
                           member.tasks.length > 0
-                            ? AllTasks.filter((task) =>
+                            ? AllTasks?.filter((task) =>
                                 member.tasks?.includes(task.title)
                               )?.every((tas) => tas.complete)
                               ? "green-star"
@@ -173,6 +173,8 @@ function CardMembers() {
               </div>
             );
           })
+        ) : AllMembersForDisplay?.length === 0 ? (
+          "nothing"
         ) : (
           <Spinner animation="border" variant="secondary" />
         )}
