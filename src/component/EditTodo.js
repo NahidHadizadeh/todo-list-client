@@ -6,13 +6,13 @@ import { updateOneMemberAPI } from "../API/membersAPI";
 import { createNewHistoryAPI } from "../API/historyAPI";
 import { AiOutlineEdit } from "react-icons/ai";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
+import useAllHistory from "../hooks/AllHistory/useAllHistory";
 
 // ------گرفتن آلتسک و ست آل تسک از پرنت برای ری رندر شدن است تا نیاز به رقرش صفحه نداشته باشیم
 function EditTodo({ TodoForEdit }) {
-  const AllMembers = useAllMembers().AllMembers;
-  const setAllMembers = useAllMembers().setAllMembers;
-  const AllTasks = useAllTasks().AllTasks;
-  const setAllTasks = useAllTasks().setAllTasks;
+  const { AllMembers, setAllMembers } = useAllMembers();
+  const { AllTasks, setAllTasks } = useAllTasks();
+  const setAllHistory = useAllHistory().setAllHistory;
   const [isChecked, setIsChecked] = useState([]);
   const [UpdateTodo, setUpdateTodo] = useState();
   const [ShowModal, setShowModal] = useState(false);
@@ -96,11 +96,14 @@ function EditTodo({ TodoForEdit }) {
     // ------------- end update task of member api
 
     // create history for edit tasks
-    await createNewHistoryAPI({
+    const dataSentHistory = await createNewHistoryAPI({
       title: "edited",
       newTodo: { ...UpdateTodo },
       todoForEdit: { ...TodoForEdit },
     });
+    if (dataSentHistory) {
+      setAllHistory(dataSentHistory.data);
+    }
   }
 
   // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
