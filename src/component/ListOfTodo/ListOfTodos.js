@@ -3,6 +3,7 @@ import "./listOfTodo.css";
 import MemberIconComponent from "../MemberIconComponent";
 import useAllMembers from "../../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../../hooks/AllTasks/useAllTasks";
+import useAllHistory from "../../hooks/AllHistory/useAllHistory";
 import { AiOutlineDelete } from "react-icons/ai";
 import { GrCompliance } from "react-icons/gr";
 import { createNewHistoryAPI } from "../../API/historyAPI";
@@ -11,10 +12,9 @@ import { deleteOneTodoAPI, updateOneTodoAPI } from "../../API/todoListAPI";
 import EditTodo from "../EditTodo";
 
 export default function ListOfTodos() {
-  const AllMembers = useAllMembers().AllMembers;
-  const setAllMembers = useAllMembers().setAllMembers;
-  const AllTasks = useAllTasks().AllTasks;
-  const setAllTasks = useAllTasks().setAllTasks;
+  const { AllMembers, setAllMembers } = useAllMembers();
+  const { AllTasks, setAllTasks } = useAllTasks();
+  const setAllHistory = useAllHistory().setAllHistory;
 
   async function handleComplete(task) {
     const dataSent = await updateOneTodoAPI(task._id, {
@@ -27,10 +27,13 @@ export default function ListOfTodos() {
     if (dataSent) {
       setAllTasks(dataSent.data);
     }
-    createNewHistoryAPI({
+    const dataSentHistory = createNewHistoryAPI({
       title: task?.complete ? "Don't Complete" : "Completed",
       newTodo: { ...task },
     });
+    if (dataSentHistory) {
+      setAllHistory(dataSentHistory.data);
+    }
   }
 
   async function handleDelete(task) {
@@ -49,10 +52,13 @@ export default function ListOfTodos() {
       }
     );
     //create history for delete tasks
-    await createNewHistoryAPI({
+    const dataSentHistory = await createNewHistoryAPI({
       title: "Deleted",
       newTodo: { ...task },
     });
+    if (dataSentHistory) {
+      setAllHistory(dataSentHistory.data);
+    }
   }
   // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
   // و ست کردن ممبر ها برای نمایش درست در پیج ممبرز
@@ -71,7 +77,7 @@ export default function ListOfTodos() {
       <div className="main-row">
         {/* sm={12} md={6} lg={4} xl={4} */}
         <Col className="columns-todo col-12">
-          {AllTasks.length > 0 ? (
+          {AllTasks?.length > 0 ? (
             AllTasks?.map((task, index) => {
               return (
                 <div key={index + "tasks"} className="todo-box">
@@ -115,6 +121,8 @@ export default function ListOfTodos() {
                 </div>
               );
             })
+          ) : AllTasks?.length === 0 ? (
+            "Notting"
           ) : (
             <Spinner animation="border" variant="secondary" />
           )}
