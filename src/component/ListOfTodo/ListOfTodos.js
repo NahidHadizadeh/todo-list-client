@@ -46,9 +46,7 @@ export default function ListOfTodos() {
     // ------ edit task's member after delete task
     AllMembers?.filter((mem) => task.manager?.includes(mem.name))?.map(
       (member) => {
-        // if (task.manager?.includes(member.name)) {
         updateTasksOfMember(member, task);
-        // }
       }
     );
     //create history for delete tasks
