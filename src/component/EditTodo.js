@@ -115,7 +115,10 @@ function EditTodo({ TodoForEdit }) {
     ) {
       const dataSentForTitle = await updateOneMemberAPI(member._id, {
         ...member,
-        tasks: [...member.tasks, UpdateTodo.title],
+        tasks: [
+          ...member.tasks?.filter((task) => task !== TodoForEdit.title),
+          UpdateTodo.title,
+        ],
       });
       if (dataSentForTitle) {
         setAllMembers(dataSentForTitle.data);
