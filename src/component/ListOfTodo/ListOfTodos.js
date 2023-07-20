@@ -120,9 +120,9 @@ export default function ListOfTodos() {
               );
             })
           ) : AllTasks?.length === 0 ? (
-            "Notting"
-          ) : (
             <Spinner animation="border" variant="secondary" />
+          ) : (
+            "Notting"
           )}
         </Col>
         {/* <Col sm={12} md={6} lg={4} xl={3} className="columns-todo">
