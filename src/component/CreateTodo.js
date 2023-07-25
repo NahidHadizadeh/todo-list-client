@@ -3,7 +3,7 @@ import useAddButton from "../hooks/AddButton/useAddButton";
 import "../component/AddMember/addMember.css";
 import { useState } from "react";
 import { updateOneMemberAPI } from "../API/membersAPI";
-import { createNewTodoAPI } from "../API/todoListAPI";
+import { createNewTodoAPI, deleteOneTodoAPI } from "../API/todoListAPI";
 import useAllMembers from "../hooks/AllMembers/useAllMembers";
 import useAllTasks from "../hooks/AllTasks/useAllTasks";
 import { createNewHistoryAPI } from "../API/historyAPI";
@@ -42,6 +42,7 @@ function CreateTask({ ShowModal }) {
       alert("Task title is empty");
       return;
     }
+    // --------- create new task
     const dataSent = await createNewTodoAPI({
       ...NewTask,
       title: NewTask.title.trim(),
@@ -50,15 +51,23 @@ function CreateTask({ ShowModal }) {
     if (dataSent) {
       setAllTasks(dataSent.data);
     }
-    // ---------------------- update task of member
-    AllMembers?.map((member) => {
-      if (
+    const checkUpdateTaskOfMemberArr = AllMembers?.filter(
+      (member) =>
         NewTask?.manager?.includes(member.name) &&
         !member.tasks?.includes(NewTask.title)
-      ) {
-        updateTasksOfMember(member);
-      }
+    )?.map((member) => {
+      updateTasksOfMember(member);
     });
+    // ------------------ اگر تسک را با موفقیت به منیجرهایش ادد کرد آنگاه تسک را میسازد
+    // ---- اگر خطای آپدیت تسکها یممبر را دریافت کند اصلا تسک جدید ایجاد نمیشود
+    if (checkUpdateTaskOfMemberArr?.find((item) => item === false)) {
+      alert("error i update task of members");
+      console.log("error i update task of members");
+      deleteTask();
+    } else {
+      console.log("not found");
+    }
+
     // --------------------------------- end update
     await createNewHistoryAPI({
       title: "Created",
@@ -73,6 +82,14 @@ function CreateTask({ ShowModal }) {
     });
     handleCloseModal();
   }
+  // -------- delete task if updateTaskOfMember has error
+  async function deleteTask() {
+    console.log("first");
+    // const dataSentDeleteTodo = await deleteOneTodoAPI(NewTask._id);
+    // if (dataSentDeleteTodo) {
+    //   setAllTasks(dataSentDeleteTodo.data);
+    // }
+  }
   // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
   // و ست کردن ممبر ها برای نمایش درست در پیج ممبرز
   async function updateTasksOfMember(member) {
@@ -80,10 +97,11 @@ function CreateTask({ ShowModal }) {
       ...member,
       tasks: [...member.tasks, NewTask.title],
     });
-    console.log(dataSent.data);
     if (dataSent) {
       setAllMembers(dataSent.data);
+      return true;
     }
+    return false;
   }
   return (
     <Modal show={ShowModal} onHide={handleCloseModal}>
