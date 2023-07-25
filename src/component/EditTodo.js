@@ -91,7 +91,7 @@ function EditTodo({ TodoForEdit }) {
     // ------------- update task of member api
 
     AllMembers?.map((member) => {
-      updateTasksOfMember(member);
+      updateMemberTasks(member);
     });
     // ------------- end update task of member api
 
@@ -108,31 +108,47 @@ function EditTodo({ TodoForEdit }) {
 
   // ------------- آپدیت تسک ممبرها و دریافت همه ی ممبرها بعد از آپدیت
   // و ست کردن ممبر ها برای نمایش درست در پیج ممبرز
-  async function updateTasksOfMember(member) {
-    if (
-      UpdateTodo.manager?.includes(member.name) &&
-      !member.tasks?.includes(UpdateTodo.title)
-    ) {
-      const dataSentForTitle = await updateOneMemberAPI(member._id, {
-        ...member,
-        tasks: [
-          ...member.tasks?.filter((task) => task !== TodoForEdit.title),
-          UpdateTodo.title,
-        ],
-      });
-      if (dataSentForTitle) {
-        setAllMembers(dataSentForTitle.data);
+  async function updateMemberTasks(member) {
+    // اگر ممبر تسک جدید شامل ممبر باشد
+    if (UpdateTodo?.manager?.includes(member.name)) {
+      // اگر ممبر شامل تاتیل تسک قبل از ادیت باشد
+      if (member.tasks?.includes(TodoForEdit?.title)) {
+        const dataSentForTitle = await updateOneMemberAPI(member._id, {
+          ...member,
+          // تایتل قدیمی حذف و تایتل جدید ادد میشود
+          tasks: [
+            ...member.tasks?.filter((task) => task !== TodoForEdit?.title),
+            UpdateTodo.title,
+          ],
+        });
+        if (dataSentForTitle) {
+          setAllMembers(dataSentForTitle.data);
+        }
+        // اگر ممبر شامل تایتل تسک قبل از ادیت نباشد
+      } else {
+        const dataSentForTitle = await updateOneMemberAPI(member._id, {
+          ...member,
+          // تسک جدید ادد میشود
+          tasks: [...member.tasks, UpdateTodo.title],
+        });
+        if (dataSentForTitle) {
+          setAllMembers(dataSentForTitle.data);
+        }
       }
-    } else if (
-      !UpdateTodo.manager?.includes(member.name) &&
-      member.tasks?.includes(UpdateTodo.title)
-    ) {
-      const dataSentForManagers = await updateOneMemberAPI(member._id, {
-        ...member,
-        tasks: [...member.tasks?.filter((task) => task !== UpdateTodo.title)],
-      });
-      if (dataSentForManagers) {
-        setAllMembers(dataSentForManagers.data);
+      // اگر ممبر جزو منیجرهای تسک نباشد(یا از لیست ممبرها حذف شده باشد)
+    } else {
+      // وقتی ممبری از منیجرها حذف شده و تسک زا دارد ،پس تسک را از تسکهای ممبر حذف میکنیم
+      if (member.tasks?.includes(TodoForEdit?.title)) {
+        const dataSentForTitle = await updateOneMemberAPI(member._id, {
+          ...member,
+          // حذف تسک از ممبری که از لیست منسجرها حذف شده
+          tasks: [
+            ...member.tasks?.filter((task) => task !== TodoForEdit?.title),
+          ],
+        });
+        if (dataSentForTitle) {
+          setAllMembers(dataSentForTitle.data);
+        }
       }
     }
   }
