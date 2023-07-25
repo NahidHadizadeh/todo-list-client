@@ -6,7 +6,7 @@ function MembersIcon() {
   const AllMembers = useAllMembers().AllMembers;
   return (
     <div className="listOfMembers" key={Math.floor(Math.random() * 100000)}>
-      {AllMembers.length > 0 ? (
+      {AllMembers?.length > 0 ? (
         AllMembers?.map((member) => {
           if (!member.admin) return <MemberIconComponent member={member} />;
         })

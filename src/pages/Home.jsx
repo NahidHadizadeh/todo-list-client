@@ -23,7 +23,7 @@ function Home() {
           <span>Members: </span>
           <div>
             <div className="listOfMembers">
-              {AllMembers.length > 0 ? (
+              {AllMembers?.length > 0 ? (
                 AllMembers?.filter((member) => member.admin)?.map(
                   (member, index) => {
                     return (
